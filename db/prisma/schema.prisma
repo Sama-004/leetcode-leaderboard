@@ -20,3 +20,4 @@ model User {
   isVerified     Boolean  @default(false)
   image         String?
 }
+// TODO: image should be lc image not google (logic in auth)

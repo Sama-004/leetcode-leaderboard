@@ -1,6 +1,7 @@
 "use client";
 import { signIn, signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 export default function Page() {
   const { data: session, status } = useSession();
@@ -9,7 +10,12 @@ export default function Page() {
       <button onClick={() => signIn()}>Signin</button>
       <br />
       <button onClick={() => signOut()}>Sign out</button>
-      {status === "authenticated" ? <div>Works</div> : <div>Does not work</div>}
+      {status === "authenticated" ? (
+        // redirect to verification page
+        redirect("/verify")
+      ) : (
+        <div>Does not work</div>
+      )}
     </div>
   );
 }
