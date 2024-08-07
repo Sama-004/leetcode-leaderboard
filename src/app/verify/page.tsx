@@ -1,7 +1,7 @@
 "use client";
 
 import { Textarea } from "@/components/ui/textarea";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { KeyboardEvent, useState } from "react";
 import Image from "next/image";
@@ -11,14 +11,48 @@ import { useToast } from "@/components/ui/use-toast";
 export default function Verify() {
   const [username, setUsername] = useState<string>("");
   const { toast } = useToast();
+  const { data: session } = useSession();
+  // console.log("Session data:", session?.user.id);
 
   const submitUsername = async () => {
+    if (!session?.user?.id) {
+      toast({
+        variant: "destructive",
+        title: "You must be logged in to verify your account",
+      });
+      return;
+    }
+
     try {
-      console.log(username);
-      const response = await axios.post("/api/verify", { username });
-      console.log(response.data);
+      console.log("Username going from frontend:", username);
+      const response = await axios.post("/api/verify", {
+        username,
+        userId: session.user.id,
+      });
+      console.log("Response from backend:", response.data);
+      if (response.data.message === "User verified successfully") {
+        toast({
+          title: "Verification successful",
+          description: "Your LeetCode account has been verified.",
+          className: "bg-green-500",
+        });
+        // Add toast for error messages and verification also
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Verification failed",
+          description: response.data.message,
+        });
+      }
     } catch (err) {
       console.error("Error sending username to the backend", err);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description:
+          "An error occurred while verifying your account. Please try again.",
+        // TODO: Need to change this message ig
+      });
     }
     //TODO: Add loader
   };
@@ -28,11 +62,11 @@ export default function Verify() {
       submitUsername();
     }
     if (event.key === " ") {
+      event.preventDefault();
       toast({
         variant: "destructive",
         title: "Username cannot contain spaces",
       });
-      event.preventDefault();
     }
   };
 
@@ -48,13 +82,14 @@ export default function Verify() {
         <Button
           onClick={submitUsername}
           className="bg-yellow-500 hover:bg-yellow-300 text-black mt-2 md:mt-0">
-          Send message
+          Verify
         </Button>
       </div>
       <h1 className="text-2xl font-semibold mb-10 mt-10">
         Add vim as skill before verifying. The steps to do so are given below
       </h1>
       <div className="flex flex-col md:flex-row mt-5">
+        {/* TODO: Need to make the images responsive */}
         <Image
           src="/ver1.png"
           width={500}

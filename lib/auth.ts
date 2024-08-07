@@ -26,22 +26,22 @@ export const authOptions: NextAuthOptions = {
               image: user.image,
             },
           });
+        } else {
+          user.id = existingUser.id;
         }
       }
       return true;
     },
     async jwt({ token, user, account }) {
       if (account && user) {
-        return {
-          accessToken: account.access_token,
-          userId: user.id,
-        };
+        token.id = user.id;
+        token.accessToken = account.access_token;
       }
       return token;
     },
     //TODO: give the correct types
     async session({ session, token }: { session: any; token: any }) {
-      session.user.id = token.userId;
+      session.user.id = token.id;
       session.accessToken = token.accessToken;
       return session;
     },
