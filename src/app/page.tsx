@@ -10,6 +10,7 @@ export default function Page() {
       <button onClick={() => signIn()}>Signin</button>
       <br />
       <button onClick={() => signOut()}>Sign out</button>
+      {/* TODO: Fix getting error when trying to signin after signout*/}
       {status === "authenticated" ? (
         // redirect to verification page
         redirect("/verify")

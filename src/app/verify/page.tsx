@@ -72,6 +72,7 @@ export default function Verify() {
 
   return (
     <div className="flex flex-col items-center p-20">
+      <button onClick={() => signOut()}>Sign out</button>
       <div className="flex flex-col md:flex-row gap-2 w-full max-w-md">
         <Textarea
           className="text-black w-full md:w-80 resize-none h-15 md:h-10"
@@ -89,33 +90,46 @@ export default function Verify() {
         Add vim as skill before verifying. The steps to do so are given below
       </h1>
       <div className="flex flex-col md:flex-row mt-5">
-        {/* TODO: Need to make the images responsive */}
+        <div className="w-full md:w-1/2">
+          <Image
+            src="/ver1.png"
+            width={500}
+            height={500}
+            alt="Steps to add vim as skill - Part 1"
+            className="mr-5"
+          />
+        </div>
+        <div className="w-full md:w-1/2">
+          <Image
+            src="/ver2.png"
+            width={500}
+            layout="responsive"
+            height={500}
+            alt="Steps to add vim as skill - Part 2"
+          />
+        </div>
+      </div>
+      <div className="w-full mb-10">
         <Image
-          src="/ver1.png"
-          width={500}
-          height={500}
-          alt="Steps to add vim as skill - Part 1"
-          className="mr-5"
-        />
-        <Image
-          src="/ver2.png"
-          width={500}
-          height={500}
-          alt="Steps to add vim as skill - Part 2"
+          src="/ver3.png"
+          layout="responsive"
+          width={1000}
+          height={100}
+          alt="Steps to add vim as skill - Part 3"
         />
       </div>
-      <Image
-        src="/ver3.png"
-        width={1000}
-        height={100}
-        alt="Steps to add vim as skill - Part 3"
-      />
-      <Image
-        src="/ver4.png"
-        width={1000}
-        height={100}
-        alt="Steps to add vim as skill - Part 4"
-      />
+      <div className="w-full">
+        <Image
+          src="/ver4.png"
+          layout="responsive"
+          width={1000}
+          height={100}
+          alt="Steps to add vim as skill - Part 4"
+        />
+      </div>
     </div>
   );
 }
+
+// TODO: Fix this image thing today and then work on safeguarding of route and redirection after verification
+// how to redirect if user is already verified
