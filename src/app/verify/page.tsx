@@ -16,6 +16,7 @@ export default function Verify() {
   const router = useRouter();
 
   const submitUsername = async () => {
+    //TODO: Add loader
     if (!session?.user?.id) {
       toast({
         variant: "destructive",
@@ -39,8 +40,10 @@ export default function Verify() {
               ...session.user,
               leetCodeUsername: response.data.user.leetCodeUsername,
               isVerified: true,
+              image: response.data.user.image,
             },
           });
+          //TODO: need to use state managers here to update username and other things or maybe just use from session when required
         }
 
         toast({
@@ -49,6 +52,7 @@ export default function Verify() {
           className: "bg-green-500",
         });
         // router.push("/dashboard");
+        router.push("/dashboard?redirectVerify=true");
       } else {
         toast({
           variant: "destructive",

@@ -26,6 +26,7 @@ export async function POST(req: Request, res: Response) {
         query userPublicProfile($username: String!) {
           matchedUser(username: $username) {
             profile {
+              userAvatar
               skillTags
             }
           }
@@ -44,6 +45,10 @@ export async function POST(req: Request, res: Response) {
     }
 
     const skillTags = response.data.data.matchedUser.profile.skillTags;
+    const leetcodeAvatar = response.data.data.matchedUser.profile.userAvatar;
+
+    console.log("Avatar:", leetcodeAvatar);
+
     console.log(skillTags);
     // if skilltags are empty then show a different message maybe
     if (skillTags.includes("vim")) {
@@ -53,13 +58,11 @@ export async function POST(req: Request, res: Response) {
         data: {
           isVerified: true,
           leetCodeUsername: username,
+          image: leetcodeAvatar,
         },
       });
-      const session = await getServerSession(authOptions);
-      if (session) {
-        session.user.isVerified = true;
-        session.user.leetCodeUsername = username;
-      }
+      //TODO: Update the session server side instead of client side. Couldn't find a way so doing it on client side
+      // https://github.com/nextauthjs/next-auth/discussions/9715
       return NextResponse.json(
         { message: "User verified successfully", user: updatedUser },
         { status: 200 }

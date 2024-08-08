@@ -4,5 +4,6 @@ declare module "next-auth" {
   interface User extends AdapterUser {
     isVerified?: boolean;
     leetCodeUsername?: string;
+    image?: string;
   }
 }
