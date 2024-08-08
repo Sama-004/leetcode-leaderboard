@@ -43,7 +43,6 @@ export default function Verify() {
               image: response.data.user.image,
             },
           });
-          //TODO: need to use state managers here to update username and other things or maybe just use from session when required
         }
 
         toast({
@@ -51,7 +50,6 @@ export default function Verify() {
           description: `${response.data.message}`,
           className: "bg-green-500",
         });
-        // router.push("/dashboard");
         router.push("/dashboard?redirectVerify=true");
       } else {
         toast({

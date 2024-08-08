@@ -7,8 +7,8 @@ import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Nav from "@/components/Nav";
 
 export default function Page() {
   const router = useRouter();
@@ -39,17 +39,8 @@ export default function Page() {
 
   return (
     <div>
-      <Button onClick={() => signOut()} className="bg-white text-black">
-        Sign Out
-      </Button>
-      <br />
-      <h2>Dashboard page</h2>
-      {session?.user?.image && (
-        <Avatar>
-          <AvatarImage src={session.user.image} />
-          <AvatarFallback>CN</AvatarFallback>
-        </Avatar>
-      )}
+      <Nav />
+      <div>Dashboard Page</div>
     </div>
   );
 }
