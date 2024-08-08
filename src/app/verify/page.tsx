@@ -1,18 +1,19 @@
 "use client";
 
 import { Textarea } from "@/components/ui/textarea";
-import { signOut, useSession } from "next-auth/react";
+import { getSession, signOut, useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
-import { KeyboardEvent, useState } from "react";
-import Image from "next/image";
+import { KeyboardEvent, useEffect, useState } from "react";
 import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
+import VerificationGuide from "@/components/verificationGuide";
+import { useRouter } from "next/navigation";
 
 export default function Verify() {
   const [username, setUsername] = useState<string>("");
   const { toast } = useToast();
-  const { data: session } = useSession();
-  // console.log("Session data:", session?.user.id);
+  const { data: session, update } = useSession();
+  const router = useRouter();
 
   const submitUsername = async () => {
     if (!session?.user?.id) {
@@ -31,12 +32,23 @@ export default function Verify() {
       });
       console.log("Response from backend:", response.data);
       if (response.data.message === "User verified successfully") {
+        if (session && session.user) {
+          await update({
+            ...session,
+            user: {
+              ...session.user,
+              leetCodeUsername: response.data.user.leetCodeUsername,
+              isVerified: true,
+            },
+          });
+        }
+
         toast({
           title: "Verification successful",
-          description: "Your LeetCode account has been verified.",
+          description: `${response.data.message}`,
           className: "bg-green-500",
         });
-        // Add toast for error messages and verification also
+        // router.push("/dashboard");
       } else {
         toast({
           variant: "destructive",
@@ -71,65 +83,30 @@ export default function Verify() {
   };
 
   return (
-    <div className="flex flex-col items-center p-20">
-      <button onClick={() => signOut()}>Sign out</button>
-      <div className="flex flex-col md:flex-row gap-2 w-full max-w-md">
-        <Textarea
-          className="text-black w-full md:w-80 resize-none h-15 md:h-10"
-          placeholder="Enter your leetcode username here."
-          onKeyDown={hadnleKeyDown}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <Button
-          onClick={submitUsername}
-          className="bg-yellow-500 hover:bg-yellow-300 text-black mt-2 md:mt-0">
-          Verify
-        </Button>
-      </div>
-      <h1 className="text-2xl font-semibold mb-10 mt-10">
-        Add vim as skill before verifying. The steps to do so are given below
-      </h1>
-      <div className="flex flex-col md:flex-row mt-5">
-        <div className="w-full md:w-1/2">
-          <Image
-            src="/ver1.png"
-            width={500}
-            height={500}
-            alt="Steps to add vim as skill - Part 1"
-            className="mr-5"
+    <div>
+      <div className="flex flex-col items-center p-10">
+        <button onClick={() => signOut()}>Sign out</button>
+        <div className="flex flex-col md:flex-row gap-2 w-full max-w-md">
+          <Textarea
+            className="text-black w-full md:w-80 resize-none h-15 md:h-10"
+            placeholder="Enter your leetcode username here."
+            onKeyDown={hadnleKeyDown}
+            onChange={(e) => setUsername(e.target.value)}
           />
+          <Button
+            onClick={submitUsername}
+            className="bg-yellow-500 hover:bg-yellow-300 text-black mt-2 md:mt-0">
+            Verify
+          </Button>
         </div>
-        <div className="w-full md:w-1/2">
-          <Image
-            src="/ver2.png"
-            width={500}
-            layout="responsive"
-            height={500}
-            alt="Steps to add vim as skill - Part 2"
-          />
-        </div>
+        <h1 className="text-2xl font-semibold mt-10">
+          Add vim as skill before verifying. The steps to do so are given below
+        </h1>
       </div>
-      <div className="w-full mb-10">
-        <Image
-          src="/ver3.png"
-          layout="responsive"
-          width={1000}
-          height={100}
-          alt="Steps to add vim as skill - Part 3"
-        />
-      </div>
-      <div className="w-full">
-        <Image
-          src="/ver4.png"
-          layout="responsive"
-          width={1000}
-          height={100}
-          alt="Steps to add vim as skill - Part 4"
-        />
+      <div>
+        {/* TODO: Send username here and show in one of the cards as links */}
+        <VerificationGuide />
       </div>
     </div>
   );
 }
-
-// TODO: Fix this image thing today and then work on safeguarding of route and redirection after verification
-// how to redirect if user is already verified

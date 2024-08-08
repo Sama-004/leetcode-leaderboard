@@ -1,6 +1,8 @@
 import axios from "axios";
-import prisma from "../../../../db";
+import prisma from "../../../../db/db";
 import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../../../lib/auth";
 
 export async function POST(req: Request, res: Response) {
   if (req.method !== "POST") {
@@ -53,6 +55,11 @@ export async function POST(req: Request, res: Response) {
           leetCodeUsername: username,
         },
       });
+      const session = await getServerSession(authOptions);
+      if (session) {
+        session.user.isVerified = true;
+        session.user.leetCodeUsername = username;
+      }
       return NextResponse.json(
         { message: "User verified successfully", user: updatedUser },
         { status: 200 }
@@ -71,3 +78,4 @@ export async function POST(req: Request, res: Response) {
     );
   }
 }
+// TODO: Display username already taken if username already exists in the db
