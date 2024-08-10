@@ -6,14 +6,22 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { NavAvatar, NavSignOutButton, NavUsername } from "./client-nav";
+import {
+  NavAvatar,
+  NavSignOutButton,
+  NavUsername,
+  SignoutButton,
+} from "./client-nav";
 
 export default function Nav() {
   return (
     <>
       <aside className="fixed inset-y-0 left-0 z-10 flex h-full w-14 flex-col border-r border-[#ecebff] bg-zinc-900 sm:w-60 hover:bg-black">
         <div className="flex h-16 items-center justify-between px-4">
-          <Link href="#" className="flex items-center gap-2" prefetch={false}>
+          <Link
+            href="/dashboard"
+            className="flex items-center gap-2"
+            prefetch={false}>
             <TestTubeIcon className="h-6 w-6 text-white" />
             <span className="text-lg font-medium text-white sm:block">
               Test
@@ -22,31 +30,29 @@ export default function Nav() {
         </div>
         <nav className="flex flex-1 flex-col items-start gap-2 px-2 py-4 sm:px-4">
           <Link
-            href="#"
-            className="flex h-9 w-full items-center gap-3 rounded-md px-3 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground sm:gap-4"
+            href="/dashboard/rooms"
+            className="flex h-9 w-full items-center gap-3 rounded-md px-3 text-muted-foreground transition-colors hover:text-foreground sm:gap-4 hover:bg-gray-600"
             prefetch={false}>
+            {/* TODO: Prefetch true when rooms logic is added */}
             <LayoutGridIcon className="h-5 w-5 text-white sm:h-6 sm:w-6" />
             <span className="hidden text-white sm:block">Rooms</span>
           </Link>
           <Link
-            href="#"
-            className="flex h-9 w-full items-center gap-3 rounded-md px-3 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground sm:gap-4"
+            href="/dashboard/rooms/new"
+            className="flex h-9 w-full items-center gap-3 rounded-md px-3 text-muted-foreground transition-colors hover:text-foreground sm:gap-4 hover:bg-gray-600"
             prefetch={false}>
             <PlusIcon className="h-5 w-5 text-white sm:h-6 sm:w-6" />
             <span className="hidden text-white sm:block">Join/Create Room</span>
           </Link>
           <Link
             href="#"
-            className="flex h-9 w-full items-center gap-3 rounded-md px-3 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground sm:gap-4"
+            className="flex h-9 w-full items-center gap-3 rounded-md px-3 text-muted-foreground transition-colors hover:text-foreground sm:gap-4 hover:bg-gray-600"
             prefetch={false}>
-            <LogOutIcon className="h-5 w-5 text-white sm:h-6 sm:w-6" />
-            <span className="hidden text-white sm:block">Sign Out</span>
+            <SignoutButton />
           </Link>
         </nav>
       </aside>
-      {/* //   <div className="flex flex-1 flex-col"> */}
-      <header className="fixed top-0 left-14 right-0 sm:left-60 flex h-16 items-center justify-between bg-zinc-900 px-4 md:px-6">
-        {/* <header className="flex h-16 w-full items-center justify-between bg-zinc-900 px-4 md:px-6"> */}
+      <header className="fixed top-0 left-14 right-0 sm:left-60 flex h-16 items-center justify-between bg-zinc-900 px-4 md:px-6 border-gray-800 border-b">
         <Link href="#" className="flex items-center gap-2" prefetch={false}>
           <span className="text-lg font-medium text-white"></span>
         </Link>
@@ -63,8 +69,10 @@ export default function Nav() {
               <NavAvatar />
               {/* Leetcode avatar */}
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem className="pointer-events-none bg-zinc-900 text-white">
+            <DropdownMenuContent
+              align="end"
+              className="bg-zinc-900 border-black">
+              <DropdownMenuItem className="pointer-events-none bg-zinc-900 text-white hover:bg-gray-600">
                 <NavUsername />
                 {/* Leetcode username */}
               </DropdownMenuItem>
@@ -116,27 +124,6 @@ function LayoutGridIcon(props: any) {
       <rect width="7" height="7" x="14" y="3" rx="1" />
       <rect width="7" height="7" x="14" y="14" rx="1" />
       <rect width="7" height="7" x="3" y="14" rx="1" />
-    </svg>
-  );
-}
-
-//TODO: Change type
-function LogOutIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round">
-      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-      <polyline points="16 17 21 12 16 7" />
-      <line x1="21" x2="9" y1="12" y2="12" />
     </svg>
   );
 }

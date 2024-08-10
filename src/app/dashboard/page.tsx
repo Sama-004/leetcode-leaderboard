@@ -34,8 +34,10 @@ export default function Page() {
 
   return (
     <div>
-      <div>Dashboard Page</div>
-      <div>Add sidebar in layout.tsx</div>
+      <h2>Dashboard Page</h2>
+      <div>
+        <s>Add sidebar in layout.tsx</s>
+      </div>
       <div>The contents will be Create room/Join Room (Use shadcn tabs)</div>
       <div>
         Joined Rooms then what happens when you click on a room that is room/:id

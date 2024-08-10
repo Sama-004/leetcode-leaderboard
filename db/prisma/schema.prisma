@@ -19,5 +19,27 @@ model User {
   leetCodeUsername String? @unique
   isVerified     Boolean  @default(false)
   image         String?
+  createdRooms     Room[]    @relation("RoomCreator")
+  participations   RoomParticipant[]
 }
-// TODO: image should be lc image not google (logic in auth)
+
+model Room {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  code        String    @unique
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  creator     User      @relation("RoomCreator", fields: [creatorId], references: [id])
+  creatorId   String
+  participants RoomParticipant[]
+}
+
+model RoomParticipant {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  room      Room     @relation(fields: [roomId], references: [id])
+  roomId    String
+  joinedAt  DateTime @default(now())
+  @@unique([userId, roomId])
+}
