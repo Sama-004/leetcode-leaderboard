@@ -1,8 +1,8 @@
 "use client";
-import { Button } from "./ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
+import { DropdownMenuItem } from "./ui/dropdown-menu";
 
 export function NavAvatar() {
   const { data: session } = useSession();
@@ -18,12 +18,19 @@ export function NavAvatar() {
   );
 }
 
+export function NavUsername() {
+  const { data: session } = useSession();
+  return (
+    <>
+      {session?.user.leetCodeUsername && <p>{session.user.leetCodeUsername}</p>}
+    </>
+  );
+}
+
 export function NavSignOutButton() {
   return (
-    <Button
-      onClick={() => signOut()}
-      className="bg-red-600 text-black hover:bg-white">
+    <DropdownMenuItem onClick={() => signOut()} className="text-red-600">
       Sign Out
-    </Button>
+    </DropdownMenuItem>
   );
 }

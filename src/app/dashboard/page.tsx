@@ -1,14 +1,9 @@
 "use client";
-
-import { Button } from "@/components/ui/button";
-import { signOut } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import Nav from "@/components/Nav";
 
 export default function Page() {
   const router = useRouter();
@@ -39,8 +34,13 @@ export default function Page() {
 
   return (
     <div>
-      <Nav />
       <div>Dashboard Page</div>
+      <div>Add sidebar in layout.tsx</div>
+      <div>The contents will be Create room/Join Room (Use shadcn tabs)</div>
+      <div>
+        Joined Rooms then what happens when you click on a room that is room/:id
+        or room/:name which would be unique
+      </div>
     </div>
   );
 }

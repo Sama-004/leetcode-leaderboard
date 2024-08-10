@@ -11,8 +11,6 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async signIn({ user, account }) {
-      console.log(`user:${user}`);
-
       if (account?.provider === "google") {
         const existingUser = await prisma.user.findUnique({
           where: {
