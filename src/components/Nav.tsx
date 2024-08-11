@@ -58,7 +58,7 @@ export default function Nav() {
         </Link>
         <div className="flex items-center gap-4">
           <Link
-            href="#"
+            href="https://github.com/sama-004"
             className="text-muted-foreground hover:text-foreground"
             prefetch={false}>
             <GithubIcon className="h-6 w-6 text-white" />

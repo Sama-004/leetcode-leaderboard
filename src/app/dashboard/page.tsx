@@ -34,11 +34,15 @@ export default function Page() {
 
   return (
     <div>
-      <h2>Dashboard Page</h2>
+      <h2>
+        <s>Dashboard Page</s>
+      </h2>
       <div>
         <s>Add sidebar in layout.tsx</s>
       </div>
-      <div>The contents will be Create room/Join Room (Use shadcn tabs)</div>
+      <div>
+        <s>The contents will be Create room/Join Room (Use shadcn tabs)</s>
+      </div>
       <div>
         Joined Rooms then what happens when you click on a room that is room/:id
         or room/:name which would be unique

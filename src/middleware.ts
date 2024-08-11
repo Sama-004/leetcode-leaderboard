@@ -22,10 +22,8 @@ export default withAuth(
           return !!token;
         }
         // Require verification for /dashboard
-        if (req.nextUrl.pathname === "/dashboard") {
+        if (req.nextUrl.pathname.startsWith("/dashboard")) {
           return !!token && token.isVerified === true;
-        } else {
-          redirect("/verify");
         }
         // Allow access to all other routes
         return true;
@@ -34,8 +32,6 @@ export default withAuth(
   }
 );
 
-export const config = { matcher: ["/verify", "/dashboard"] };
-
-// export { default } from "next-auth/middleware";
-
-// export const config = { matcher: ["/verify"] };
+export const config = {
+  matcher: ["/verify", "/dashboard/", "/dashboard/:path*"],
+};
