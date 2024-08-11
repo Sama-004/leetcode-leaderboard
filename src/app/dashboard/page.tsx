@@ -43,10 +43,6 @@ export default function Page() {
       <div>
         <s>The contents will be Create room/Join Room (Use shadcn tabs)</s>
       </div>
-      <div>
-        Joined Rooms then what happens when you click on a room that is room/:id
-        or room/:name which would be unique
-      </div>
     </div>
   );
 }

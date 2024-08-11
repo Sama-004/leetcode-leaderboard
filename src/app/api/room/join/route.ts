@@ -26,7 +26,8 @@ export async function POST(req: Request, res: Response) {
     }
 
     const isAlreadyParticipant = room.participants.some(
-      (p) => p.userId === session.user.id
+      //   TODO: give correct types
+      (p: any) => p.userId === session.user.id
     );
     if (isAlreadyParticipant) {
       return NextResponse.json(
