@@ -47,21 +47,13 @@ export default function Page() {
     }
     setIsLoading(true);
     try {
-      const response = await fetch("/api/rooms/join", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ roomCode }),
-      });
-      if (!response.ok) {
-        throw new Error("failed to join room");
-      }
-      const data = await response.json();
-      router.push(`/room/${data.name}`);
-    } catch (err) {
-      console.error(err);
+      const response = await axios.post("/api/room/join", { roomCode });
+      router.push(`room/${response.data.id}`);
+    } catch (error) {
+      console.error(error);
       toast({
         title: "Error",
-        description: "Failed to create room. Please try again.",
+        description: "Failed to join room. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -80,7 +72,7 @@ export default function Page() {
     }
     setIsLoading(true);
     try {
-      const response = await axios.post("/api/room", { roomName });
+      const response = await axios.post("/api/room/create", { roomName });
       router.push(`/room/${response.data.name}`);
     } catch (error) {
       toast({
@@ -122,8 +114,9 @@ export default function Page() {
             <CardFooter>
               <Button
                 className="bg-green-500 hover:bg-gray-500"
-                onClick={() => console.log("Room Code:", roomCode)}>
-                Join Room
+                onClick={() => console.log("Room Code:", roomCode)}
+                disabled={isLoading}>
+                {isLoading ? "Joining..." : "Join Room"}
               </Button>
             </CardFooter>
           </Card>

@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import prisma from "../../../../db/db";
+import prisma from "../../../../../db/db";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../../../lib/auth";
-import { GenerateRoomCode } from "../../../../lib/roomCode";
+import { authOptions } from "../../../../../lib/auth";
+import { GenerateRoomCode } from "../../../../../lib/roomCode";
 
 export async function POST(req: Request, res: Response) {
   try {
