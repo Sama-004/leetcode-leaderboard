@@ -1,11 +1,11 @@
 "use client";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 
-export default function Page() {
+function DashboardContent() {
   const router = useRouter();
   const { toast } = useToast();
   const searchParams = useSearchParams();
@@ -44,5 +44,13 @@ export default function Page() {
         <s>The contents will be Create room/Join Room (Use shadcn tabs)</s>
       </div>
     </div>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <DashboardContent />
+    </Suspense>
   );
 }
