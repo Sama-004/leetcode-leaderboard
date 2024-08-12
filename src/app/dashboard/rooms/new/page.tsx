@@ -114,7 +114,7 @@ export default function Page() {
             <CardFooter>
               <Button
                 className="bg-green-500 hover:bg-gray-500"
-                onClick={() => console.log("Room Code:", roomCode)}
+                onClick={handleJoinRoom}
                 disabled={isLoading}>
                 {isLoading ? "Joining..." : "Join Room"}
               </Button>

@@ -43,6 +43,27 @@ function DashboardContent() {
       <div>
         <s>The contents will be Create room/Join Room (Use shadcn tabs)</s>
       </div>
+      <div>Joined rooms page</div>
+      <div>Room name page route</div>
+      <div>Show the data of users in a room</div>
+      <div>
+        Leetcode datafetch logic at verification time only or after verification
+        and caching
+      </div>
+      <div>
+        Show message of already verified profile if trying to verify the same
+      </div>
+      <div className="bg-red-600">Leave a joined room</div>
+      <div className="bg-red-600">What happens when owner leaves a room?</div>
+      <div>Do something with badges. data.matcheduser.contestBadge.name</div>
+      <div>
+        Route Groups for dashboard route
+        <a
+          className="bg-blue-500"
+          href="https://nextjs.org/docs/app/building-your-application/routing/route-groups">
+          {` https://nextjs.org/docs/app/building-your-application/routing/route-groups`}
+        </a>
+      </div>
     </div>
   );
 }
