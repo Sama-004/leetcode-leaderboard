@@ -3,26 +3,15 @@
 import * as React from "react";
 import {
   ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
   flexRender,
   getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
   useReactTable,
+  getSortedRowModel,
+  SortingState,
+  ColumnFiltersState,
+  getFilteredRowModel,
 } from "@tanstack/react-table";
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -31,6 +20,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ArrowUpDown } from "lucide-react";
 
 interface RoomParticipant {
   user: {
@@ -46,13 +38,11 @@ interface RoomParticipant {
   } | null;
 }
 
-export const columns: ColumnDef<RoomParticipant>[] = [
+const columns: ColumnDef<RoomParticipant>[] = [
   {
     accessorKey: "user.leetCodeUsername",
     header: "Username",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("user.leetCodeUsername")}</div>
-    ),
+    cell: ({ row }) => <div>{row.original.user.leetCodeUsername}</div>,
   },
   {
     accessorKey: "stats.easyQuestionsSolved",
@@ -67,9 +57,7 @@ export const columns: ColumnDef<RoomParticipant>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="text-center">
-        {row.getValue("stats.easyQuestionsSolved") || 0}
-      </div>
+      <div>{row.original.stats?.easyQuestionsSolved || 0}</div>
     ),
   },
   {
@@ -85,9 +73,7 @@ export const columns: ColumnDef<RoomParticipant>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="text-center">
-        {row.getValue("stats.mediumQuestionsSolved") || 0}
-      </div>
+      <div>{row.original.stats?.mediumQuestionsSolved || 0}</div>
     ),
   },
   {
@@ -103,9 +89,7 @@ export const columns: ColumnDef<RoomParticipant>[] = [
       );
     },
     cell: ({ row }) => (
-      <div className="text-center">
-        {row.getValue("stats.hardQuestionsSolved") || 0}
-      </div>
+      <div>{row.original.stats?.hardQuestionsSolved || 0}</div>
     ),
   },
   {
@@ -120,11 +104,7 @@ export const columns: ColumnDef<RoomParticipant>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <div className="text-center">
-        {row.getValue("stats.contestRating") || "N/A"}
-      </div>
-    ),
+    cell: ({ row }) => <div>{row.original.stats?.contestRating || "N/A"}</div>,
   },
   {
     accessorKey: "stats.globalRanking",
@@ -138,20 +118,12 @@ export const columns: ColumnDef<RoomParticipant>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <div className="text-center">
-        {row.getValue("stats.globalRanking") || "N/A"}
-      </div>
-    ),
+    cell: ({ row }) => <div>{row.original.stats?.globalRanking || "N/A"}</div>,
   },
   {
     accessorKey: "stats.attendedContests",
     header: "Contests",
-    cell: ({ row }) => (
-      <div className="text-center">
-        {row.getValue("stats.attendedContests") || 0}
-      </div>
-    ),
+    cell: ({ row }) => <div>{row.original.stats?.attendedContests || 0}</div>,
   },
 ];
 
@@ -160,31 +132,24 @@ export function DataTable({ data }: { data: RoomParticipant[] }) {
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
-  const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
     data,
     columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+    onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
       columnFilters,
-      columnVisibility,
-      rowSelection,
     },
   });
 
   return (
-    <div className="w-full">
+    <div className="overflow-x-auto">
+      {/* <div> */}
       <div className="flex items-center py-4">
         <Input
           placeholder="Filter usernames..."
@@ -200,31 +165,6 @@ export function DataTable({ data }: { data: RoomParticipant[] }) {
           }
           className="max-w-sm"
         />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Columns <ChevronDown className="ml-2 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }>
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
       <div className="rounded-md border">
         <Table>
@@ -273,28 +213,6 @@ export function DataTable({ data }: { data: RoomParticipant[] }) {
             )}
           </TableBody>
         </Table>
-      </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div>
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}>
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}>
-            Next
-          </Button>
-        </div>
       </div>
     </div>
   );

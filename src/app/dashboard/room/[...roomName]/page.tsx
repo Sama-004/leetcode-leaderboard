@@ -32,6 +32,7 @@ interface Room {
   code: string;
   creator: User;
   participants: RoomParticipant[];
+  lastUpdated: string;
 }
 
 export default function Page() {
@@ -73,8 +74,10 @@ export default function Page() {
     return <div>Room not found</div>;
   }
 
+  console.log("Participants data:", room.participants);
+
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 sm:text-xl">
       <h1 className="text-2xl font-bold mb-4">{room.name}</h1>
       <p>Room Code: {room.code}</p>
       <p>Created by: {room.creator.leetCodeUsername}</p>

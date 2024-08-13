@@ -33,6 +33,7 @@ export async function GET(
                 id: true,
                 email: true,
                 leetCodeUsername: true,
+                stats: true,
               },
             },
           },
@@ -51,7 +52,19 @@ export async function GET(
         { status: 403 }
       );
     }
-    return NextResponse.json(room, { status: 200 });
+    const restructuredRoom = {
+      ...room,
+      participants: room.participants.map((p) => ({
+        user: {
+          id: p.user.id,
+          email: p.user.email,
+          leetCodeUsername: p.user.leetCodeUsername,
+        },
+        stats: p.user.stats,
+      })),
+    };
+
+    return NextResponse.json(restructuredRoom, { status: 200 });
   } catch (err) {
     console.error("Error fetching room details:", err);
     return NextResponse.json(
