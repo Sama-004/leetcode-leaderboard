@@ -57,6 +57,11 @@ function DashboardContent() {
       <div className="bg-red-600">What happens when owner leaves a room?</div>
       <div>Do something with badges. data.matcheduser.contestBadge.name</div>
       <div>
+        Fix the thing new user cannot verify their id without signing out
+        because for the first time the id is not the same as db id of the user
+      </div>
+      <div>No redirect on successful login</div>
+      <div>
         Route Groups for dashboard route
         <a
           className="bg-blue-500"

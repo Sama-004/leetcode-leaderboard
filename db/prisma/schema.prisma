@@ -21,6 +21,7 @@ model User {
   image         String?
   createdRooms     Room[]    @relation("RoomCreator")
   participations   RoomParticipant[]
+  stats            UserStats?
 }
 
 model Room {
@@ -43,3 +44,17 @@ model RoomParticipant {
   joinedAt  DateTime @default(now())
   @@unique([userId, roomId])
 }
+
+model UserStats{
+  id                String @id @default(cuid())
+  user              User   @relation(fields: [userId], references: [id])
+  userId            String @unique
+  easyQuestionsSolved   Int 
+  mediumQuestionsSolved Int 
+  hardQuestionsSolved   Int 
+  contestRating Int
+  globalRanking Int
+  attendedContests Int
+  lastUpdated       DateTime @default(now())
+}
+// stats to db and when to fetch them in the background so that user does not face any issue

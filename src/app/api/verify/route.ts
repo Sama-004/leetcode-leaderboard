@@ -3,6 +3,7 @@ import prisma from "../../../../db/db";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../../../lib/auth";
+import { fetchUserStats } from "../../../../lib/fetchUserstats";
 
 export async function POST(req: Request, res: Response) {
   if (req.method !== "POST") {
@@ -61,8 +62,9 @@ export async function POST(req: Request, res: Response) {
           image: leetcodeAvatar,
         },
       });
-      //TODO: Update the session server side instead of client side. Couldn't find a way so doing it on client side
-      // https://github.com/nextauthjs/next-auth/discussions/9715
+
+      fetchUserStats(username, userId).catch(console.error);
+
       return NextResponse.json(
         { message: "User verified successfully", user: updatedUser },
         { status: 200 }
