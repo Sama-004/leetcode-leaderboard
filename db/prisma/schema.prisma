@@ -24,6 +24,14 @@ model User {
   stats            UserStats?
 }
 
+model Notification {
+  id        String   @id @default(cuid())
+  roomId    String
+  room      Room     @relation(fields: [roomId], references: [id])
+  message   String
+  createdAt DateTime @default(now())
+}
+
 model Room {
   id          String    @id @default(cuid())
   name        String    @unique
@@ -33,6 +41,7 @@ model Room {
   creator     User      @relation("RoomCreator", fields: [creatorId], references: [id])
   creatorId   String
   participants RoomParticipant[]
+  notifications Notification[]
 }
 
 model RoomParticipant {
@@ -44,6 +53,7 @@ model RoomParticipant {
   joinedAt  DateTime @default(now())
   @@unique([userId, roomId])
 }
+
 
 model UserStats{
   id                String @id @default(cuid())
@@ -57,4 +67,3 @@ model UserStats{
   attendedContests Int
   lastUpdated       DateTime @default(now())
 }
-// stats to db and when to fetch them in the background so that user does not face any issue

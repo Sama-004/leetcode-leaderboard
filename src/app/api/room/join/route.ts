@@ -31,29 +31,42 @@ export async function POST(req: Request, res: Response) {
     );
     if (isAlreadyParticipant) {
       return NextResponse.json(
-        //   Need to return name here i guess
+        //TODO: Need to return name here instead of room id
         { message: "Already a member of the room", roomId: room.id },
         { status: 409 }
       );
     }
 
-    const updatedRoom = await prisma.room.update({
-      where: { id: room.id },
-      data: {
-        participants: {
-          create: {
-            userId: session.user.id,
+    const updatedRoom = await prisma.$transaction(async (prisma) => {
+      const updatedRoom = await prisma.room.update({
+        where: { id: room.id },
+        data: {
+          participants: {
+            create: {
+              userId: session.user.id,
+            },
           },
         },
-      },
-      include: {
-        participants: {
-          include: {
-            user: true,
+        include: {
+          participants: {
+            include: {
+              user: true,
+            },
           },
         },
-      },
+      });
+
+      await prisma.notification.create({
+        data: {
+          roomId: room.id,
+          message: `${
+            session.user.leetCodeUsername || "A new user"
+          } joined the room.`,
+        },
+      });
+      return updatedRoom;
     });
+
     return NextResponse.json(updatedRoom, { status: 200 });
   } catch (err) {
     console.error("Error occured while joining room", err);

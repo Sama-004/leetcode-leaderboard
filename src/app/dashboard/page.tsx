@@ -43,22 +43,26 @@ function DashboardContent() {
       <div>
         <s>The contents will be Create room/Join Room (Use shadcn tabs)</s>
       </div>
-      <div>Joined rooms page</div>
-      <div>Room name page route</div>
-      <div>Show the data of users in a room</div>
       <div>
-        Leetcode datafetch logic at verification time only or after verification
-        and caching
+        <s>Joined rooms page</s>
       </div>
+      <div>Room name page route from id</div>
+      <div>
+        <s>Show the data of users in a room</s>
+      </div>
+      <div>Fetch data every 1 hour with cronjobs</div>
       <div>
         Show message of already verified profile if trying to verify the same
       </div>
       <div className="bg-red-600">Leave a joined room</div>
       <div className="bg-red-600">What happens when owner leaves a room?</div>
       <div>Do something with badges. data.matcheduser.contestBadge.name</div>
+      <div>Graphs</div>
       <div>
         Fix the thing new user cannot verify their id without signing out
-        because for the first time the id is not the same as db id of the user
+        because for the first time the session id is not the same as db id of
+        the user(possible fix could be just fetching the data from the db after
+        a new user is signed up and then the process would be a lot easier)
       </div>
       <div>No redirect on successful login</div>
       <div>
@@ -69,6 +73,7 @@ function DashboardContent() {
           {` https://nextjs.org/docs/app/building-your-application/routing/route-groups`}
         </a>
       </div>
+      <div>Invite link to join rooms</div>
     </div>
   );
 }

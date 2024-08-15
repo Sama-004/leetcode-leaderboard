@@ -22,7 +22,7 @@ export default function Nav() {
             href="/dashboard"
             className="flex items-center gap-2"
             prefetch={false}>
-            <TestTubeIcon className="h-6 w-6 text-white" />
+            <TestTubeIcon className="h-6 w-6 text-white sm:text-lg md:text-sm" />
             <span className="text-lg font-medium text-white sm:block">
               Test
             </span>
@@ -34,7 +34,7 @@ export default function Nav() {
             className="flex h-9 w-full items-center gap-3 rounded-md px-3 text-muted-foreground transition-colors hover:text-foreground sm:gap-4 hover:bg-gray-600"
             prefetch={false}>
             {/* TODO: Prefetch true when rooms logic is added */}
-            <LayoutGridIcon className="h-5 w-5 text-white sm:h-6 sm:w-6" />
+            <LayoutGridIcon className="h-10 w-10 text-white m:h-6 md:w-6 sm:text-lg md:text-sm" />
             <span className="hidden text-white sm:block">Rooms</span>
           </Link>
           <Link
