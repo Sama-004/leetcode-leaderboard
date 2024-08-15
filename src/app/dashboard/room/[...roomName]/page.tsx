@@ -46,11 +46,17 @@ export default function Page() {
   const [room, setRoom] = useState<Room | null>(null);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [unreadNotifications, setUnreadNotifications] = useState<number>(0);
   const { toast } = useToast();
   const params = useParams();
   const roomName = Array.isArray(params.roomName)
     ? params.roomName[0]
     : params.roomName;
+
+  const markNotificationsAsRead = () => {
+    localStorage.setItem(`lastRead_${roomName}`, new Date().toISOString());
+    setUnreadNotifications(0);
+  };
 
   useEffect(() => {
     const fetchRoomDetails = async () => {
@@ -74,7 +80,15 @@ export default function Page() {
         const response = await axios.get<Notification[]>(
           `/api/room/${roomName}/notifications`
         );
-        setNotifications(response.data);
+        const newNotifications = response.data;
+        setNotifications(newNotifications);
+
+        const lastReadTimestamp =
+          localStorage.getItem(`lastRead_${roomName}`) || "0";
+        const unreadCount = newNotifications.filter(
+          (n) => new Date(n.createdAt) > new Date(lastReadTimestamp)
+        ).length;
+        setUnreadNotifications(unreadCount);
       } catch (error) {
         console.error("Failed to fetch notifications", error);
       }
@@ -110,7 +124,14 @@ export default function Page() {
       <Tabs defaultValue="ranking" className="mt-6">
         <TabsList className="bg-black text-white">
           <TabsTrigger value="ranking">Leaderboard</TabsTrigger>
-          <TabsTrigger value="notifications">Notifications</TabsTrigger>
+          <TabsTrigger value="notifications" onClick={markNotificationsAsRead}>
+            Notifications
+            {unreadNotifications > 0 && (
+              <span className="ml-2 bg-red-500 text-white text-xs font-bold rounded-full px-2 py-1">
+                {unreadNotifications}
+              </span>
+            )}
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="ranking">
           <h2 className="text-lg sm:text-xl font-semibold mt-4 mb-2">
@@ -119,7 +140,7 @@ export default function Page() {
           <DataTable data={room.participants} />
         </TabsContent>
         <TabsContent value="notifications" className="mt-4">
-          <Card>
+          <Card className="bg-black text-white">
             <CardHeader>
               <CardTitle>Notifications</CardTitle>
             </CardHeader>
@@ -128,7 +149,14 @@ export default function Page() {
                 <ul className="space-y-2">
                   {notifications.map((notification) => (
                     <li key={notification.id} className="border-b pb-2">
-                      <p>{notification.message}</p>
+                      <p>
+                        <a
+                          href={`https://leetcode.com/u/${
+                            notification.message.split(" ")[0]
+                          }`}>
+                          {notification.message}
+                        </a>
+                      </p>
                       <small className="text-gray-500">
                         {new Date(notification.createdAt).toLocaleString()}
                       </small>
