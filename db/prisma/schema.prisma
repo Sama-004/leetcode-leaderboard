@@ -67,3 +67,5 @@ model UserStats{
   attendedContests Int
   lastUpdated       DateTime @default(now())
 }
+
+// {"query":"\n    query recentAcSubmissions($username: String!, $limit: Int!) {\n  recentAcSubmissionList(username: $username, limit: $limit) {\n    id\n    title\n    titleSlug\n    timestamp\n  }\n}\n    ","variables":{"username":"virinci","limit":15},"operationName":"recentAcSubmissions"}

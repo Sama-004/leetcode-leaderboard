@@ -37,6 +37,7 @@ interface RoomParticipant {
     contestRating: number;
     globalRanking: number;
     attendedContests: number;
+    lastUpdated: string;
   } | null;
 }
 
@@ -202,6 +203,24 @@ const columns: ColumnDef<RoomParticipant>[] = [
     cell: ({ row }) => <div>{row.original.stats?.attendedContests || 0}</div>,
   },
 ];
+
+// {
+//   accessorKey: "stats.lastUpdated",
+//   header: ({ column }) => {
+//     return (
+//       <Button variant="ghost" className="whitespace-nowrap">
+//         <span className="hidden sm:inline">Last Updated</span>
+//         <span className="sm:hidden">LU</span>
+//       </Button>
+//     );
+//   },
+//   cell: ({ row }) => (
+//     <div>
+//       {new Date(row.original.stats?.lastUpdated).toLocaleString() || 0}
+//     </div>
+//   ),
+// },
+// ];
 
 export function DataTable({ data }: { data: RoomParticipant[] }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);

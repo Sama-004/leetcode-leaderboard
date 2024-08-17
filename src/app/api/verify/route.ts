@@ -18,6 +18,19 @@ export async function POST(req: Request, res: Response) {
       where: { id: userId },
     });
 
+    const userExists = await prisma.user.findUnique({
+      where: { leetCodeUsername: username },
+    });
+
+    if (userExists) {
+      return NextResponse.json(
+        {
+          message: "Profile is already verified by someone else",
+        },
+        { status: 409 }
+      );
+    }
+
     if (!user) {
       return NextResponse.json({ message: "User not found" }, { status: 404 }); // user.id does not exist in the database
     }
@@ -40,7 +53,7 @@ export async function POST(req: Request, res: Response) {
     if (response.data.errors) {
       console.log(response.data.errors);
       return NextResponse.json(
-        { message: "Cannot find username" },
+        { message: "Cannot find user" },
         { status: 404 }
       );
     }

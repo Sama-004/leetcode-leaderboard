@@ -32,6 +32,15 @@ export default function Verify() {
         userId: session.user.id,
       });
       console.log("Response from backend:", response.data);
+      if (
+        response.data.message === "Profile is already verified by someone else"
+      ) {
+        toast({
+          variant: "destructive",
+          title: "Username already being used by someone else",
+          description: "Username already verified by someone else",
+        });
+      }
       if (response.data.message === "User verified successfully") {
         if (session && session.user) {
           await update({

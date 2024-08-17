@@ -34,23 +34,17 @@ function DashboardContent() {
 
   return (
     <div>
-      <h2>
-        <s>Dashboard Page</s>
-      </h2>
-      <div>
-        <s>Add sidebar in layout.tsx</s>
-      </div>
-      <div>
-        <s>The contents will be Create room/Join Room (Use shadcn tabs)</s>
-      </div>
-      <div>
-        <s>Joined rooms page</s>
-      </div>
+    <div>Send one message for one problem</div>
+        <div>Fix date for rankings</div>
+            <div>Right now the cron job starts every 5 minute. Need to change that to 1 or something</div>
+    <div>Fix notification timing and date</div>
       <div>Room name page route from id</div>
-      <div>
-        <s>Show the data of users in a room</s>
-      </div>
+      <div>Table is not updating need to reload to update. Should be changed ig (idk how)</div>
+      <div>Room name on title of the page (metadata)</div>
+      <div>Change date to today and yesterday in notification tab or use date headings (like whatsapp)</div>
+      <div>Use the timestamp returned by api for solved messages</div>
       <div>Fetch data every 1 hour with cronjobs</div>
+      <div>Invite link to join rooms</div>
       <div>
         Show message of already verified profile if trying to verify the same
       </div>
@@ -73,7 +67,6 @@ function DashboardContent() {
           {` https://nextjs.org/docs/app/building-your-application/routing/route-groups`}
         </a>
       </div>
-      <div>Invite link to join rooms</div>
     </div>
   );
 }

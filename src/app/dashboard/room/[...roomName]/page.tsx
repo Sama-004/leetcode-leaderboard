@@ -98,6 +98,7 @@ export default function Page() {
       fetchRoomDetails();
       fetchNotifications();
     }
+    // TODO: Think about caching here
     const intervalId = setInterval(fetchNotifications, 30000); // check for notifications every 30 seconds
     return () => clearInterval(intervalId);
   }, [roomName, toast]);
