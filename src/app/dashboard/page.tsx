@@ -34,13 +34,9 @@ export default function DashboardContent() {
 
   return (
     <div>
-      <div>Send one message for one problem</div>
-      <div>Fix date for rankings</div>
-      <div>
-        Right now the cron job starts every 5 minute. Need to change that to 1
-        or something
-      </div>
       <div>Room name page route from id</div>
+      <p>Add colors for the difficulty of problem sovled</p>
+      <p>Make rating change green</p>
       <div>
         Table is not updating need to reload to update. Should be changed ig
         (idk how)
@@ -51,8 +47,6 @@ export default function DashboardContent() {
         headings (like whatsapp)
       </div>
       <div>Use the timestamp returned by api for solved messages</div>
-      <div>Fetch data every 1 hour with cronjobs</div>
-      <div>Invite link to join rooms</div>
       <div>
         Show message of already verified profile if trying to verify the same
       </div>

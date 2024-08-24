@@ -3,10 +3,12 @@
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { LoadingSpinner } from "@/components/ui/spinner";
 
 export default function Page({ params }: { params: { invitecode: string } }) {
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
   const { toast } = useToast();
   console.log("Code is:", params.invitecode);
 
@@ -18,27 +20,44 @@ export default function Page({ params }: { params: { invitecode: string } }) {
     try {
       console.log("Invite code being sent:", params.invitecode);
       const response = await axios.get(`/api/room/invite/${params.invitecode}`);
-      toast({
-        title: "Success",
-        description: "Room joined successfully",
-        variant: "default",
-      });
-      console.log("room joined successfully", response);
-      // router.push("/room");
+      if (response) {
+        setLoading(false);
+      }
+      if (response.status === 200) {
+        toast({
+          title: "Success",
+          description: "Room joined successfully",
+          variant: "default",
+          className: "bg-green-500",
+        });
+      }
+      router.push("/dashboard/rooms");
     } catch (error) {
       console.error(error);
       toast({
         title: "Error",
         description: "Failed to join room. Please try again.",
         variant: "destructive",
+        className: "bg-red-600",
       });
-      // router.push("/");
+      router.push("/dashboard/rooms");
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
-      <p>Joining room...</p>
+    <div className="flex flex-col justify-center items-center min-h-screen space-y-4">
+      {loading ? (
+        <>
+          <p>Joining Room</p>
+          <LoadingSpinner className="m-2 h-10 w-10" />
+        </>
+      ) : (
+        <>
+          <p>Redirecting</p>
+          <LoadingSpinner className="m-2 h-10 w-10" />
+        </>
+      )}
+      <div></div>
     </div>
   );
 }
