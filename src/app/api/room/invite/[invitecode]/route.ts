@@ -5,17 +5,20 @@ import prisma from "../../../../../../db/db";
 
 export async function GET(
   req: Request,
-  { params }: { params: { inviteCode: string } }
+  { params }: { params: { invitecode: string } }
 ) {
   const session = await getServerSession(authOptions);
   if (!session || !session.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const { inviteCode } = params;
+
+  const { invitecode } = params;
+  console.log("Received roomCode:", invitecode);
+
   try {
     const room = await prisma.room.findUnique({
       where: {
-        code: inviteCode,
+        code: invitecode,
       },
       include: { participants: true },
     });

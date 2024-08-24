@@ -1,11 +1,11 @@
 "use client";
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { useSearchParams } from "next/navigation";
 import { useSession } from "next-auth/react";
 
-function DashboardContent() {
+export default function DashboardContent() {
   const router = useRouter();
   const { toast } = useToast();
   const searchParams = useSearchParams();
@@ -34,14 +34,22 @@ function DashboardContent() {
 
   return (
     <div>
-    <div>Send one message for one problem</div>
-        <div>Fix date for rankings</div>
-            <div>Right now the cron job starts every 5 minute. Need to change that to 1 or something</div>
-    <div>Fix notification timing and date</div>
+      <div>Send one message for one problem</div>
+      <div>Fix date for rankings</div>
+      <div>
+        Right now the cron job starts every 5 minute. Need to change that to 1
+        or something
+      </div>
       <div>Room name page route from id</div>
-      <div>Table is not updating need to reload to update. Should be changed ig (idk how)</div>
+      <div>
+        Table is not updating need to reload to update. Should be changed ig
+        (idk how)
+      </div>
       <div>Room name on title of the page (metadata)</div>
-      <div>Change date to today and yesterday in notification tab or use date headings (like whatsapp)</div>
+      <div>
+        Change date to today and yesterday in notification tab or use date
+        headings (like whatsapp)
+      </div>
       <div>Use the timestamp returned by api for solved messages</div>
       <div>Fetch data every 1 hour with cronjobs</div>
       <div>Invite link to join rooms</div>
@@ -68,13 +76,5 @@ function DashboardContent() {
         </a>
       </div>
     </div>
-  );
-}
-
-export default function Page() {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <DashboardContent />
-    </Suspense>
   );
 }
