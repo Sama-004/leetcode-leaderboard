@@ -1,11 +1,12 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DataTable } from "@/components/data-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
 
 interface User {
   id: string;
@@ -57,6 +58,29 @@ export default function Page() {
     localStorage.setItem(`lastRead_${roomName}`, new Date().toISOString());
     setUnreadNotifications(0);
   };
+
+  const generateInviteLink = useCallback(
+    (roomCode: string) => {
+      const baseUrl = window.location.origin;
+      return `${baseUrl}/invite/${room?.code}`;
+    },
+    [room]
+  );
+
+  const copyInviteLink = useCallback(
+    (roomCode: string) => {
+      if (room) {
+        const link = generateInviteLink(room.code);
+        navigator.clipboard.writeText(link);
+      }
+      toast({
+        title: "Success",
+        description: "Invite link copied to clipboard",
+        variant: "default",
+      });
+    },
+    [generateInviteLink, toast, room]
+  );
 
   useEffect(() => {
     const fetchRoomDetails = async () => {
@@ -119,6 +143,12 @@ export default function Page() {
     <div className="container mx-auto p-4 sm:px-6 lg:px-8">
       <h1 className="text-xl sm:text-2xl font-bold mb-4">{room.name}</h1>
       <p className="text-sm sm:text-base">Room Code: {room.code}</p>
+      <Button
+        className="bg-blue-500 hover:bg-blue-600 mt-2"
+        onClick={() => copyInviteLink(room.code)}
+        disabled={!room.code}>
+        Copy Invite Link
+      </Button>
       <p className="text-sm sm:text-base">
         Created by: {room.creator.leetCodeUsername}
       </p>
