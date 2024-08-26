@@ -6,8 +6,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DataTable } from "@/components/data-table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
 import LeaveRoom from "./LeaveRoom";
+import InviteButton from "./InviteButton";
 
 interface User {
   id: string;
@@ -142,12 +142,7 @@ export default function Page() {
     <div className="container mx-auto p-4 sm:px-6 lg:px-8">
       <h1 className="text-xl sm:text-2xl font-bold mb-4">{room.name}</h1>
       <p className="text-sm sm:text-base">Room Code: {room.code}</p>
-      <Button
-        className="bg-blue-500 hover:bg-blue-600 mt-2"
-        onClick={() => copyInviteLink(room.code)}
-        disabled={!room.code}>
-        Copy Invite Link
-      </Button>
+      <InviteButton room={room} />
       <LeaveRoom roomName={roomName} />
       <p className="text-sm sm:text-base">TODO: Add created at time and date</p>
       <Tabs defaultValue="ranking" className="mt-6">
