@@ -82,7 +82,6 @@ export default function Page() {
           variant: "default",
         });
         router.push("/dashboard/rooms");
-        // redirect("/dashboard/rooms");
       }
     } catch (error) {
       console.error("Failed to leave room", error);
