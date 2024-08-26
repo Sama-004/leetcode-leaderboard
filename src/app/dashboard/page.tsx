@@ -35,6 +35,11 @@ export default function DashboardContent() {
   return (
     <div>
       <div>Room name page route from id</div>
+      <div>Fix redirect on join from join/create route</div>
+      <div>
+        change the arrow for rating and ranking change (make it more
+        interactive)
+      </div>
       <p>Add colors for the difficulty of problem sovled</p>
       <p>Make rating change green</p>
       <div>

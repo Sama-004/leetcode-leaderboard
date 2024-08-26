@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -13,12 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Profile {
-  id         String  @id @default(uuid()) @db.Uuid
-  firstName  String? @map("first_name")
-  lastName   String? @map("last_name")
-  user       User    @relation(fields: [id], references: [id], onDelete: Cascade)
-}
 model User {
   id            String    @id @default(cuid())
   email         String?   @unique
@@ -74,4 +62,3 @@ model UserStats{
   lastUpdated       DateTime @default(now())
 }
 
-// {"query":"\n    query recentAcSubmissions($username: String!, $limit: Int!) {\n  recentAcSubmissionList(username: $username, limit: $limit) {\n    id\n    title\n    titleSlug\n    timestamp\n  }\n}\n    ","variables":{"username":"virinci","limit":15},"operationName":"recentAcSubmissions"}

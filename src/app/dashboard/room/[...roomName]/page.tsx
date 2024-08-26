@@ -1,6 +1,7 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { redirect, useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 import { useToast } from "@/components/ui/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -47,8 +48,10 @@ export default function Page() {
   const [room, setRoom] = useState<Room | null>(null);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLeavingRoom, setIsLeavingRoom] = useState(false);
   const [unreadNotifications, setUnreadNotifications] = useState<number>(0);
   const { toast } = useToast();
+  const router = useRouter();
   const params = useParams();
   const roomName = Array.isArray(params.roomName)
     ? params.roomName[0]
@@ -66,6 +69,32 @@ export default function Page() {
     },
     [room]
   );
+
+  const handleLeaveRoom = async () => {
+    setIsLeavingRoom(true);
+    try {
+      console.log("Id sent from frontend", roomName);
+      const response = await axios.post(`/api/room/${roomName}/leave`);
+      if (response.status === 200) {
+        toast({
+          title: "Success",
+          description: "You have left the room.",
+          variant: "default",
+        });
+        router.push("/dashboard/rooms");
+        // redirect("/dashboard/rooms");
+      }
+    } catch (error) {
+      console.error("Failed to leave room", error);
+      toast({
+        title: "Error",
+        description: "Failed to leave room. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLeavingRoom(false);
+    }
+  };
 
   const copyInviteLink = useCallback(
     (roomCode: string) => {
@@ -128,7 +157,7 @@ export default function Page() {
   }, [roomName, toast]);
 
   if (isLoading) {
-    // TODO: Add skeleton or loader
+    // TODO: Add skeleton
     return <div>Loading...</div>;
   }
 
@@ -136,8 +165,6 @@ export default function Page() {
     // TODO: Better error message
     return <div>Room not found</div>;
   }
-
-  console.log("Participants data:", room.participants);
 
   return (
     <div className="container mx-auto p-4 sm:px-6 lg:px-8">
@@ -149,9 +176,13 @@ export default function Page() {
         disabled={!room.code}>
         Copy Invite Link
       </Button>
-      <p className="text-sm sm:text-base">
-        Created by: {room.creator.leetCodeUsername}
-      </p>
+      <Button
+        className="bg-red-500 hover:bg-red-600 mt-2 ml-2"
+        onClick={handleLeaveRoom}
+        disabled={isLeavingRoom}>
+        {isLeavingRoom ? "Leaving..." : "Leave Room"}
+      </Button>
+      <p className="text-sm sm:text-base">TODO: Add created at time and date</p>
       <Tabs defaultValue="ranking" className="mt-6">
         <TabsList className="bg-black text-white">
           <TabsTrigger value="ranking">Leaderboard</TabsTrigger>
