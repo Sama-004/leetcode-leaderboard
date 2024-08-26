@@ -34,8 +34,6 @@ export default function DashboardContent() {
 
   return (
     <div>
-      <div>Room name page route from id</div>
-      <div>Fix redirect on join from join/create route</div>
       <div>
         change the arrow for rating and ranking change (make it more
         interactive)
@@ -55,8 +53,6 @@ export default function DashboardContent() {
       <div>
         Show message of already verified profile if trying to verify the same
       </div>
-      <div className="bg-red-600">Leave a joined room</div>
-      <div className="bg-red-600">What happens when owner leaves a room?</div>
       <div>Do something with badges. data.matcheduser.contestBadge.name</div>
       <div>Graphs</div>
       <div>
