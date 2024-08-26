@@ -60,29 +60,6 @@ export default function Page() {
     setUnreadNotifications(0);
   };
 
-  const generateInviteLink = useCallback(
-    (roomCode: string) => {
-      const baseUrl = window.location.origin;
-      return `${baseUrl}/invite/${room?.code}`;
-    },
-    [room]
-  );
-
-  const copyInviteLink = useCallback(
-    (roomCode: string) => {
-      if (room) {
-        const link = generateInviteLink(room.code);
-        navigator.clipboard.writeText(link);
-      }
-      toast({
-        title: "Success",
-        description: "Invite link copied to clipboard",
-        variant: "default",
-      });
-    },
-    [generateInviteLink, toast, room]
-  );
-
   useEffect(() => {
     const fetchRoomDetails = async () => {
       try {
