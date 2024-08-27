@@ -23,6 +23,7 @@ model Notification {
   roomId    String
   room      Room     @relation(fields: [roomId], references: [id])
   message   String
+  color String @default("gray")
   createdAt DateTime @default(now())
 }
 
