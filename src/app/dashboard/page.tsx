@@ -34,7 +34,6 @@ export default function DashboardContent() {
 
   return (
     <div>
-      <div>Fix invite error</div>
       <div>
         change the arrow for rating and ranking change (make it more
         interactive)
