@@ -39,18 +39,17 @@ export default function DashboardContent() {
         change the arrow for rating and ranking change (make it more
         interactive)
       </div>
+      <div>Remove dashboard and add the redirect verify to /rooms</div>
       <p>Add colors for the difficulty of problem sovled</p>
       <p>Make rating change green</p>
       <div>
         Table is not updating need to reload to update. Should be changed ig
         (idk how)
       </div>
-      <div>Room name on title of the page (metadata)</div>
       <div>
         Change date to today and yesterday in notification tab or use date
         headings (like whatsapp)
       </div>
-      <div>Use the timestamp returned by api for solved messages</div>
       <div>
         Show message of already verified profile if trying to verify the same
       </div>
@@ -62,15 +61,7 @@ export default function DashboardContent() {
         the user(possible fix could be just fetching the data from the db after
         a new user is signed up and then the process would be a lot easier)
       </div>
-      <div>No redirect on successful login</div>
-      <div>
-        Route Groups for dashboard route
-        <a
-          className="bg-blue-500"
-          href="https://nextjs.org/docs/app/building-your-application/routing/route-groups">
-          {` https://nextjs.org/docs/app/building-your-application/routing/route-groups`}
-        </a>
-      </div>
+      <div>fix No redirect on successful login </div>
     </div>
   );
 }

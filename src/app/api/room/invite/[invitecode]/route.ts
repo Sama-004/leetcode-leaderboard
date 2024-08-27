@@ -9,7 +9,7 @@ export async function GET(
 ) {
   const session = await getServerSession(authOptions);
   if (!session || !session.user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: "Unauthorized", success: false }, { status: 401 });
   }
 
   const { invitecode } = params;
@@ -24,20 +24,20 @@ export async function GET(
     });
 
     if (!room) {
-      return NextResponse.json({ message: "Room not found" }, { status: 404 });
+      return NextResponse.json({ message: "Room not found", success: false }, { status: 404 });
     }
 
-    // TODO: Fix types here
     const isAlreadyParticipant = room.participants.some(
       (p: any) => p.userId === session.user.id
     );
 
     if (isAlreadyParticipant) {
       return NextResponse.json(
-        { message: "Already a member of the room", roomId: room.id },
+        { message: "Already a member of the room", roomId: room.id, success: true },
         { status: 200 }
       );
     }
+
     const updatedRoom = await prisma.$transaction(async (prisma) => {
       const updatedRoom = await prisma.room.update({
         where: { id: room.id },
@@ -68,14 +68,15 @@ export async function GET(
 
       return updatedRoom;
     });
+
     return NextResponse.json(
-      { message: "Room joined successfully", roomId: room.id },
+      { message: "Room joined successfully", roomId: room.id, success: true },
       { status: 200 }
     );
   } catch (err) {
     console.error("Error joining the room", err);
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: "Internal server error", success: false },
       { status: 500 }
     );
   }

@@ -20,20 +20,19 @@ export default function Page({ params }: { params: { invitecode: string } }) {
     try {
       console.log("Invite code being sent:", params.invitecode);
       const response = await axios.get(`/api/room/invite/${params.invitecode}`);
+      const data=response.data
       if (response) {
         setLoading(false);
       }
-      if (response.status === 200) {
+        if(data.success){
         toast({
           title: "Success",
           description: "Room joined successfully",
           variant: "default",
           className: "bg-green-500",
         });
-      }
       router.push("/dashboard/rooms");
-    } catch (error) {
-      console.error(error);
+      }else{
       toast({
         title: "Error",
         description: "Failed to join room. Please try again.",
@@ -41,6 +40,9 @@ export default function Page({ params }: { params: { invitecode: string } }) {
         className: "bg-red-600",
       });
       router.push("/dashboard/rooms");
+      }
+    } catch (error) {
+      console.error(error);
     }
   };
 
