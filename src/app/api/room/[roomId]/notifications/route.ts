@@ -6,7 +6,6 @@ export async function GET(
   { params }: { params: { roomId: string } }
 ) {
   const roomId = params.roomId;
-  // console.log("Room Id:", roomId);
 
   try {
     console.log("From notification");

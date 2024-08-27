@@ -50,7 +50,7 @@ export default function LeaveRoom({ roomName }: LeaveRoomProps) {
   };
   return (
     <AlertDialog>
-      <AlertDialogTrigger>
+      <AlertDialogTrigger asChild>
         <Button className="bg-red-500 hover:bg-red-600 mt-2 ml-2">
           {isLeavingRoom ? "Leaving..." : "Leave Room"}
         </Button>
@@ -61,8 +61,7 @@ export default function LeaveRoom({ roomName }: LeaveRoomProps) {
             Are you absolutely sure?
           </AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
+            This action cannot be undone. This will permanently remove you from the room.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

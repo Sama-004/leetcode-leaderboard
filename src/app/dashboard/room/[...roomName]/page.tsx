@@ -28,9 +28,33 @@ async function getRoomDetails(roomName: string) {
     return null;
   }
 }
+async function getNotifications(roomName: string) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session || !session.user) {
+      throw new Error("No session or user available");
+    }
+    const headersList = headers();
+    const cookies = headersList.get('cookie');
+    const config = {
+      headers: {
+        Cookie: cookies,
+      },
+    };
+    const response = await axios.get(
+      `http://localhost:3000/api/room/${roomName}/notifications`,
+      config
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Failed to fetch notifications", error);
+    return [];
+  }
+}
 
 export async function generateMetadata(
-  { params },
+  { params }: { params: { roomName: string } },
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   try {
@@ -46,6 +70,18 @@ export async function generateMetadata(
   }
 }
 
-export default async function Page() {
-  return <ClientComponent />;
+type Props = {
+  params: { roomName: string }
+  searchParams: { [key: string]: string | string[] | undefined }
+}
+
+
+export default async function Page({ params }: Props) {
+  const room=await getRoomDetails(params.roomName);
+  const notifications=await getNotifications(params.roomName);
+  if(!room){
+    return <div>Room not found</div>
+  }
+
+  return <ClientComponent room={room} roomName={params.roomName} initialNotifications={notifications}/>;
 }
