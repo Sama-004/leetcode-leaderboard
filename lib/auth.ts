@@ -46,14 +46,18 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     //TODO: give the correct types
-    // async session({ session, token }: { session: Session; token: JWT }) { TODO: remove duplication
     async session({ session, token }: { session: any; token: any }) {
-      session.user.id = token.id;
-      session.accessToken = token.accessToken;
-      session.user.isVerified = token.isVerified;
-      session.user.leetCodeUsername = token.leetCodeUsername;
-      session.user.image = token.image;
-      return session;
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: token.id,
+          isVerified: token.isVerified,
+          leetCodeUsername: token.leetCodeUsername,
+          image: token.image,
+        },
+        accessToken: token.accessToken,
+      };
     },
   },
   session: {
