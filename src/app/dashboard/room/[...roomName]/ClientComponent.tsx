@@ -8,11 +8,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import LeaveRoom from "./LeaveRoom";
 import InviteButton from "./InviteButton";
 
-// These are the colors
-// --sd-easy: 180 74% 42%; // Green
-// --sd-medium: 43 100% 50%; //Yellow
-// --sd-hard: 0 91% 59%; //Red
-
 interface Notification {
   id: string;
   message: string;
@@ -65,9 +60,9 @@ export default function ClientComponent({
   const [unreadNotifications, setUnreadNotifications] = useState<number>(0);
 
   const colorMap: { [key: string]: string } = {
-    red: "text-red-500",
-    green: "text-green-500",
-    yellow: "text-yellow-500",
+    green: "text-[hsl(180,74%,42%)]",
+    yellow: "text-[hsl(43,100%,50%)]",
+    red: "text-[hsl(0,91%,59%)]",
   };
 
   const updateUnreadCount = useCallback(
@@ -145,7 +140,6 @@ export default function ClientComponent({
                   {notifications.map((notification) => (
                     <li key={notification.id} className="border-b pb-2">
                       <p>
-                        {/* <span className={`text-${notification.color}-500`}> */}
                         <span className={colorMap[notification.color]}>
                           {`${notification.message}`}
                         </span>
@@ -154,7 +148,6 @@ export default function ClientComponent({
                         {new Date(notification.createdAt).toLocaleString()}
                       </small>
                     </li>
-                    // );
                   ))}
                 </ul>
               ) : (
