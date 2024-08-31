@@ -8,10 +8,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import LeaveRoom from "./LeaveRoom";
 import InviteButton from "./InviteButton";
 
+// These are the colors
+// --sd-easy: 180 74% 42%; // Green
+// --sd-medium: 43 100% 50%; //Yellow
+// --sd-hard: 0 91% 59%; //Red
+
 interface Notification {
   id: string;
   message: string;
   createdAt: string;
+  color: string;
 }
 
 interface Room {
@@ -49,27 +55,44 @@ interface ClientComponentProps {
   roomName: string;
 }
 
-  export default function ClientComponent({ room,roomName, initialNotifications}: ClientComponentProps) {
-  const [notifications, setNotifications] = useState<Notification[]>(initialNotifications);
+export default function ClientComponent({
+  room,
+  roomName,
+  initialNotifications,
+}: ClientComponentProps) {
+  const [notifications, setNotifications] =
+    useState<Notification[]>(initialNotifications);
   const [unreadNotifications, setUnreadNotifications] = useState<number>(0);
 
-     const updateUnreadCount = useCallback((notifs: Notification[]) => {
-    const lastReadTimestamp = localStorage.getItem(`lastRead_${roomName}`) || "0";
-    const unreadCount = notifs.filter(
-      (n) => new Date(n.createdAt) > new Date(lastReadTimestamp)
-    ).length;
-    setUnreadNotifications(unreadCount);
-  }, [roomName]);
+  const colorMap: { [key: string]: string } = {
+    red: "text-red-500",
+    green: "text-green-500",
+    yellow: "text-yellow-500",
+  };
 
-    const markNotificationsAsRead = useCallback(() => {
+  const updateUnreadCount = useCallback(
+    (notifs: Notification[]) => {
+      const lastReadTimestamp =
+        localStorage.getItem(`lastRead_${roomName}`) || "0";
+      const unreadCount = notifs.filter(
+        (n) => new Date(n.createdAt) > new Date(lastReadTimestamp)
+      ).length;
+      setUnreadNotifications(unreadCount);
+    },
+    [roomName]
+  );
+
+  const markNotificationsAsRead = useCallback(() => {
     const now = new Date().toISOString();
     localStorage.setItem(`lastRead_${roomName}`, now);
     setUnreadNotifications(0);
   }, [roomName]);
 
-   const fetchNotifications = useCallback(async () => {
+  const fetchNotifications = useCallback(async () => {
     try {
-      const response = await axios.get<Notification[]>(`/api/room/${roomName}/notifications`);
+      const response = await axios.get<Notification[]>(
+        `/api/room/${roomName}/notifications`
+      );
       const newNotifications = response.data;
       setNotifications(newNotifications);
       updateUnreadCount(newNotifications);
@@ -78,7 +101,7 @@ interface ClientComponentProps {
     }
   }, [roomName, updateUnreadCount]);
 
-    useEffect(() => {
+  useEffect(() => {
     fetchNotifications(); // Fetch notifications immediately on mount
     updateUnreadCount(initialNotifications); // Initialize unread count
 
@@ -122,14 +145,16 @@ interface ClientComponentProps {
                   {notifications.map((notification) => (
                     <li key={notification.id} className="border-b pb-2">
                       <p>
-                        <a href={`https://leetcode.com/u/${notification.message.split(" ")[0]}`}>
-                          {notification.message}
-                        </a>
+                        {/* <span className={`text-${notification.color}-500`}> */}
+                        <span className={colorMap[notification.color]}>
+                          {`${notification.message}`}
+                        </span>
                       </p>
                       <small className="text-gray-500">
                         {new Date(notification.createdAt).toLocaleString()}
                       </small>
                     </li>
+                    // );
                   ))}
                 </ul>
               ) : (

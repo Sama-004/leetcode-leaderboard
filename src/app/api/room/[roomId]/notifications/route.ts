@@ -8,10 +8,20 @@ export async function GET(
   const roomId = params.roomId;
 
   try {
-    console.log("From notification");
     const room = await prisma.room.findUnique({
       where: { id: roomId },
       include: { notifications: { orderBy: { createdAt: "desc" } } },
+      // include: {
+      //   notifications: {
+      //     select: {
+      //       id: true,
+      //       message: true,
+      //       createdAt: true,
+      //       color: true,
+      //     },
+      //     orderBy: { createdAt: "desc" },
+      //   },
+      // },
     });
 
     if (!room) {
