@@ -1,6 +1,6 @@
-import GoogleProvider from "next-auth/providers/google";
-import { NextAuthOptions } from "next-auth";
-import prisma from "../db/db";
+import GoogleProvider from 'next-auth/providers/google';
+import { NextAuthOptions } from 'next-auth';
+import prisma from '../db/db';
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -11,7 +11,7 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async signIn({ user, account }) {
-      if (account?.provider === "google") {
+      if (account?.provider === 'google') {
         const existingUser = await prisma.user.findUnique({
           where: {
             email: user.email ?? undefined,
@@ -26,14 +26,14 @@ export const authOptions: NextAuthOptions = {
         } else {
           user.id = existingUser.id;
           user.isVerified = existingUser.isVerified;
-          user.leetCodeUsername = existingUser.leetCodeUsername || "";
-          user.image = existingUser.image || "";
+          user.leetCodeUsername = existingUser.leetCodeUsername || '';
+          user.image = existingUser.image || '';
         }
       }
       return true;
     },
     async jwt({ token, user, account, trigger, session }) {
-      if (trigger === "update") {
+      if (trigger === 'update') {
         return { ...token, ...session.user };
       }
       if (account && user) {
@@ -61,6 +61,6 @@ export const authOptions: NextAuthOptions = {
     },
   },
   session: {
-    strategy: "jwt",
+    strategy: 'jwt',
   },
 };

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { signIn, signOut } from "next-auth/react";
-import { useSession } from "next-auth/react";
-import { Button } from "./ui/button";
+import { signIn, signOut } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
+import { Button } from './ui/button';
 
 export default function HomePage() {
   const { data: session, status } = useSession();
@@ -16,7 +16,7 @@ export default function HomePage() {
           signOut
         </Button>
       </div>
-      {status === "authenticated" ? (
+      {status === 'authenticated' ? (
         <div>Logged in</div>
       ) : (
         <div>Does not work</div>

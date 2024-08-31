@@ -1,10 +1,10 @@
-import Nav from "@/components/Nav";
-import type { Metadata } from "next";
+import Nav from '@/components/Nav';
+import type { Metadata } from 'next';
 
 // TODO: Remove this and add this logic in the page components
 export const metadata: Metadata = {
-  title: "Dashboard",
-  description: "Dashboard",
+  title: 'Dashboard',
+  description: 'Dashboard',
 };
 
 export default function Layout({ children }: { children: React.ReactNode }) {

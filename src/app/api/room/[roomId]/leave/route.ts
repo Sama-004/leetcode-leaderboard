@@ -1,17 +1,17 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "../../../../../../lib/auth";
-import prisma from "../../../../../../db/db";
-import { NextResponse } from "next/server";
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../../../../../../lib/auth';
+import prisma from '../../../../../../db/db';
+import { NextResponse } from 'next/server';
 
 export async function POST(
   req: Request,
-  { params }: { params: { roomId: string } }
+  { params }: { params: { roomId: string } },
 ) {
   const roomId = params.roomId;
-  console.log("Room Id for leave:", roomId);
+  console.log('Room Id for leave:', roomId);
   const session = await getServerSession(authOptions);
   if (!session || !session.user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   try {
@@ -20,7 +20,7 @@ export async function POST(
       include: { participants: true },
     });
     if (!room) {
-      return NextResponse.json({ message: "Room not found" }, { status: 404 });
+      return NextResponse.json({ message: 'Room not found' }, { status: 404 });
     }
     const userId = session.user.id;
     await prisma.roomParticipant.deleteMany({
@@ -44,11 +44,11 @@ export async function POST(
     }
 
     return NextResponse.json(
-      { message: "Successfully left the room" },
-      { status: 200 }
+      { message: 'Successfully left the room' },
+      { status: 200 },
     );
   } catch (err) {
-    console.error("Error leaving room:", err);
-    return NextResponse.json({ error: "Internal server error" });
+    console.error('Error leaving room:', err);
+    return NextResponse.json({ error: 'Internal server error' });
   }
 }

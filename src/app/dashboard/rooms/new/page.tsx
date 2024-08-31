@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import {
   Card,
   CardContent,
@@ -6,22 +6,22 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useCallback, useState } from "react";
-import { useRouter } from "next/navigation";
-import { useToast } from "@/components/ui/use-toast";
-import axios from "axios";
-import { useSession } from "next-auth/react";
+} from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useCallback, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useToast } from '@/components/ui/use-toast';
+import axios from 'axios';
+import { useSession } from 'next-auth/react';
 
 //TODO: add metadata somewhere else
 
 export default function Page() {
-  const [roomCode, setRoomCode] = useState("");
-  const [roomName, setRoomName] = useState("");
+  const [roomCode, setRoomCode] = useState('');
+  const [roomName, setRoomName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
@@ -29,9 +29,9 @@ export default function Page() {
 
   const handleKeyDown = (
     event: React.KeyboardEvent<HTMLInputElement>,
-    action: () => void
+    action: () => void,
   ) => {
-    if (event.key === "Enter") {
+    if (event.key === 'Enter') {
       action();
     }
   };
@@ -39,22 +39,22 @@ export default function Page() {
   const handleJoinRoom = async () => {
     if (!roomCode.trim()) {
       toast({
-        title: "Error",
-        description: "Please enter a room code",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Please enter a room code',
+        variant: 'destructive',
       });
       return;
     }
     setIsLoading(true);
     try {
-      const response = await axios.post("/api/room/join", { roomCode });
+      const response = await axios.post('/api/room/join', { roomCode });
       router.push(`/dashboard/room/${response.data.id}`);
     } catch (error) {
       console.error(error);
       toast({
-        title: "Error",
-        description: "Failed to join room. Please try again.",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to join room. Please try again.',
+        variant: 'destructive',
       });
     } finally {
       setIsLoading(false);
@@ -64,21 +64,21 @@ export default function Page() {
   const handleCreateRoom = async () => {
     if (!roomName.trim()) {
       toast({
-        title: "Error",
-        description: "Please enter a room name",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Please enter a room name',
+        variant: 'destructive',
       });
       return;
     }
     setIsLoading(true);
     try {
-      const response = await axios.post("/api/room/create", { roomName });
+      const response = await axios.post('/api/room/create', { roomName });
       router.push(`/dashboard/room/${response.data.id}`);
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Failed to create room. Please try again.",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to create room. Please try again.',
+        variant: 'destructive',
       });
     } finally {
       setIsLoading(false);
@@ -115,8 +115,9 @@ export default function Page() {
               <Button
                 className="bg-green-500 hover:bg-gray-500"
                 onClick={handleJoinRoom}
-                disabled={isLoading}>
-                {isLoading ? "Joining..." : "Join Room"}
+                disabled={isLoading}
+              >
+                {isLoading ? 'Joining...' : 'Join Room'}
               </Button>
             </CardFooter>
           </Card>
@@ -147,8 +148,9 @@ export default function Page() {
               <Button
                 className="bg-red-600 hover:bg-gray-500"
                 onClick={handleCreateRoom}
-                disabled={isLoading}>
-                {isLoading ? "Creating..." : "Create Room"}
+                disabled={isLoading}
+              >
+                {isLoading ? 'Creating...' : 'Create Room'}
               </Button>
             </CardFooter>
           </Card>

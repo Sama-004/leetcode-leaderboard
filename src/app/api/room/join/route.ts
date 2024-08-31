@@ -1,18 +1,18 @@
-import { NextResponse } from "next/server";
-import { authOptions } from "../../../../../lib/auth";
-import { getServerSession } from "next-auth";
-import prisma from "../../../../../db/db";
+import { NextResponse } from 'next/server';
+import { authOptions } from '../../../../../lib/auth';
+import { getServerSession } from 'next-auth';
+import prisma from '../../../../../db/db';
 
 export async function POST(req: Request, res: Response) {
   const session = await getServerSession(authOptions);
 
   if (!session || !session.user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
   const { roomCode } = await req.json();
 
-  if (!roomCode || typeof roomCode !== "string") {
-    return NextResponse.json({ error: "Invalid room code" }, { status: 400 });
+  if (!roomCode || typeof roomCode !== 'string') {
+    return NextResponse.json({ error: 'Invalid room code' }, { status: 400 });
   }
   try {
     const room = await prisma.room.findUnique({
@@ -22,18 +22,18 @@ export async function POST(req: Request, res: Response) {
       include: { participants: true },
     });
     if (!room) {
-      return NextResponse.json({ error: "Room not found" }, { status: 404 });
+      return NextResponse.json({ error: 'Room not found' }, { status: 404 });
     }
 
     const isAlreadyParticipant = room.participants.some(
       //   TODO: give correct types
-      (p: any) => p.userId === session.user.id
+      (p: any) => p.userId === session.user.id,
     );
     if (isAlreadyParticipant) {
       return NextResponse.json(
         //TODO: Need to return name here instead of room id
-        { message: "Already a member of the room", roomId: room.id },
-        { status: 409 }
+        { message: 'Already a member of the room', roomId: room.id },
+        { status: 409 },
       );
     }
 
@@ -60,7 +60,7 @@ export async function POST(req: Request, res: Response) {
         data: {
           roomId: room.id,
           message: `${
-            session.user.leetCodeUsername || "A new user"
+            session.user.leetCodeUsername || 'A new user'
           } joined the room.`,
         },
       });
@@ -69,10 +69,10 @@ export async function POST(req: Request, res: Response) {
 
     return NextResponse.json(updatedRoom, { status: 200 });
   } catch (err) {
-    console.error("Error occured while joining room", err);
+    console.error('Error occured while joining room', err);
     return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
+      { error: 'Internal Server Error' },
+      { status: 500 },
     );
   }
 }

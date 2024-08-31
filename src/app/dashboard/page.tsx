@@ -1,9 +1,9 @@
-"use client";
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { useToast } from "@/components/ui/use-toast";
-import { useSearchParams } from "next/navigation";
-import { useSession } from "next-auth/react";
+'use client';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useToast } from '@/components/ui/use-toast';
+import { useSearchParams } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 export default function DashboardContent() {
   const router = useRouter();
@@ -14,9 +14,9 @@ export default function DashboardContent() {
   console.log(session);
 
   useEffect(() => {
-    const redirectVerify = searchParams.get("redirectVerify");
+    const redirectVerify = searchParams.get('redirectVerify');
     console.log(redirectVerify);
-    if (redirectVerify === "true") {
+    if (redirectVerify === 'true') {
       setShowToast(true);
     }
   }, [searchParams]);
@@ -24,11 +24,11 @@ export default function DashboardContent() {
   useEffect(() => {
     if (showToast) {
       toast({
-        title: "Verification successful",
-        description: "Your account has been successfully verified.",
-        className: "bg-green-500 border-none",
+        title: 'Verification successful',
+        description: 'Your account has been successfully verified.',
+        className: 'bg-green-500 border-none',
       });
-      router.replace("/dashboard");
+      router.replace('/dashboard');
     }
   }, [showToast, router, toast]);
 

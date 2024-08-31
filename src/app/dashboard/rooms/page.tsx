@@ -1,11 +1,11 @@
-"use client";
-import { useToast } from "@/components/ui/use-toast";
-import axios from "axios";
+'use client';
+import { useToast } from '@/components/ui/use-toast';
+import axios from 'axios';
 // import type { Metadata } from "next";
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
 // TODO: send metadata logic to server side
 // export const metadata: Metadata = {
@@ -39,14 +39,14 @@ export default function Page() {
   useEffect(() => {
     const fetchRooms = async () => {
       try {
-        const response = await axios.get<Room[]>("/api/room/joined");
+        const response = await axios.get<Room[]>('/api/room/joined');
         setRooms(response.data);
       } catch (error) {
-        console.error("Failed to fetch rooms", error);
+        console.error('Failed to fetch rooms', error);
         toast({
-          title: "Error",
-          description: "Failed to fetch rooms. Please try again.",
-          variant: "destructive",
+          title: 'Error',
+          description: 'Failed to fetch rooms. Please try again.',
+          variant: 'destructive',
         });
       } finally {
         setIsLoading(false);

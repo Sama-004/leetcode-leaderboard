@@ -1,17 +1,17 @@
-import Link from "next/link";
+import Link from 'next/link';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
+} from '@/components/ui/dropdown-menu';
 import {
   NavAvatar,
   NavSignOutButton,
   NavUsername,
   SignoutButton,
-} from "./client-nav";
+} from './client-nav';
 
 export default function Nav() {
   return (
@@ -21,7 +21,8 @@ export default function Nav() {
           <Link
             href="/dashboard"
             className="flex items-center gap-2"
-            prefetch={false}>
+            prefetch={false}
+          >
             <TestTubeIcon className="h-6 w-6 text-white sm:text-lg md:text-sm" />
             <span className="text-lg font-medium text-white sm:block">
               Test
@@ -32,7 +33,8 @@ export default function Nav() {
           <Link
             href="/dashboard/rooms"
             className="flex h-9 w-full items-center gap-3 rounded-md px-3 text-muted-foreground transition-colors hover:text-foreground sm:gap-4 hover:bg-gray-600"
-            prefetch={false}>
+            prefetch={false}
+          >
             {/* TODO: Prefetch true when rooms logic is added */}
             <LayoutGridIcon className="h-10 w-10 text-white m:h-6 md:w-6 sm:text-lg md:text-sm" />
             <span className="hidden text-white sm:block">Rooms</span>
@@ -40,14 +42,16 @@ export default function Nav() {
           <Link
             href="/dashboard/rooms/new"
             className="flex h-9 w-full items-center gap-3 rounded-md px-3 text-muted-foreground transition-colors hover:text-foreground sm:gap-4 hover:bg-gray-600"
-            prefetch={false}>
+            prefetch={false}
+          >
             <PlusIcon className="h-5 w-5 text-white sm:h-6 sm:w-6" />
             <span className="hidden text-white sm:block">Join/Create Room</span>
           </Link>
           <Link
             href="#"
             className="flex h-9 w-full items-center gap-3 rounded-md px-3 text-muted-foreground transition-colors hover:text-foreground sm:gap-4 hover:bg-gray-600"
-            prefetch={false}>
+            prefetch={false}
+          >
             <SignoutButton />
           </Link>
         </nav>
@@ -60,7 +64,8 @@ export default function Nav() {
           <Link
             href="https://github.com/sama-004"
             className="text-muted-foreground hover:text-foreground"
-            prefetch={false}>
+            prefetch={false}
+          >
             <GithubIcon className="h-6 w-6 text-white" />
             <span className="sr-only">GitHub</span>
           </Link>
@@ -71,7 +76,8 @@ export default function Nav() {
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="end"
-              className="bg-zinc-900 border-black">
+              className="bg-zinc-900 border-black"
+            >
               <DropdownMenuItem className="pointer-events-none bg-zinc-900 text-white hover:bg-gray-600">
                 <NavUsername />
                 {/* Leetcode username */}
@@ -99,7 +105,8 @@ function GithubIcon(props: any) {
       stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
-      strokeLinejoin="round">
+      strokeLinejoin="round"
+    >
       <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
       <path d="M9 18c-4.51 2-5-2-7-2" />
     </svg>
@@ -119,7 +126,8 @@ function LayoutGridIcon(props: any) {
       stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
-      strokeLinejoin="round">
+      strokeLinejoin="round"
+    >
       <rect width="7" height="7" x="3" y="3" rx="1" />
       <rect width="7" height="7" x="14" y="3" rx="1" />
       <rect width="7" height="7" x="14" y="14" rx="1" />
@@ -141,7 +149,8 @@ function PlusIcon(props: any) {
       stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
-      strokeLinejoin="round">
+      strokeLinejoin="round"
+    >
       <path d="M5 12h14" />
       <path d="M12 5v14" />
     </svg>
@@ -161,7 +170,8 @@ function TestTubeIcon(props: any) {
       stroke="currentColor"
       strokeWidth="2"
       strokeLinecap="round"
-      strokeLinejoin="round">
+      strokeLinejoin="round"
+    >
       <path d="M14.5 2v17.5c0 1.4-1.1 2.5-2.5 2.5h0c-1.4 0-2.5-1.1-2.5-2.5V2" />
       <path d="M8.5 2h7" />
       <path d="M14.5 16h-5" />

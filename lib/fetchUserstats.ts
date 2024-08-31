@@ -1,9 +1,9 @@
-import axios from "axios";
-import prisma from "../db/db";
+import axios from 'axios';
+import prisma from '../db/db';
 
 export async function fetchUserStats(username: string, userId: string) {
   try {
-    const contestResponse = await axios.post("https://leetcode.com/graphql", {
+    const contestResponse = await axios.post('https://leetcode.com/graphql', {
       query: `
         query userContestRankingInfo($username: String!) {
           userContestRanking(username: $username) {
@@ -19,7 +19,7 @@ export async function fetchUserStats(username: string, userId: string) {
     const { attendedContestsCount, rating, globalRanking } =
       contestResponse.data.data.userContestRanking;
 
-    const progressResponse = await axios.post("https://leetcode.com/graphql", {
+    const progressResponse = await axios.post('https://leetcode.com/graphql', {
       query: `
         query userProfileUserQuestionProgressV2($userSlug: String!) { 
           userProfileUserQuestionProgressV2(userSlug: $userSlug) { 
@@ -39,11 +39,11 @@ export async function fetchUserStats(username: string, userId: string) {
 
     // TODO: Change type here
     const easyQuestionsSolved =
-      questionProgress.find((q: any) => q.difficulty === "EASY")?.count || 0;
+      questionProgress.find((q: any) => q.difficulty === 'EASY')?.count || 0;
     const mediumQuestionsSolved =
-      questionProgress.find((q: any) => q.difficulty === "MEDIUM")?.count || 0;
+      questionProgress.find((q: any) => q.difficulty === 'MEDIUM')?.count || 0;
     const hardQuestionsSolved =
-      questionProgress.find((q: any) => q.difficulty === "HARD")?.count || 0;
+      questionProgress.find((q: any) => q.difficulty === 'HARD')?.count || 0;
 
     await prisma.userStats.upsert({
       where: { userId: userId },

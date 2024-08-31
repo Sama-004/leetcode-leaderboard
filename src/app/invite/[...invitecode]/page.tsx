@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
-import axios from "axios";
-import { useToast } from "@/components/ui/use-toast";
-import { useEffect, useState } from "react";
-import { LoadingSpinner } from "@/components/ui/spinner";
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import { useToast } from '@/components/ui/use-toast';
+import { useEffect, useState } from 'react';
+import { LoadingSpinner } from '@/components/ui/spinner';
 
 export default function Page({ params }: { params: { invitecode: string } }) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
-  console.log("Code is:", params.invitecode);
+  console.log('Code is:', params.invitecode);
 
   useEffect(() => {
     joinRoom();
@@ -18,28 +18,28 @@ export default function Page({ params }: { params: { invitecode: string } }) {
 
   const joinRoom = async () => {
     try {
-      console.log("Invite code being sent:", params.invitecode);
+      console.log('Invite code being sent:', params.invitecode);
       const response = await axios.get(`/api/room/invite/${params.invitecode}`);
-      const data=response.data
+      const data = response.data;
       if (response) {
         setLoading(false);
       }
-        if(data.success){
+      if (data.success) {
         toast({
-          title: "Success",
-          description: "Room joined successfully",
-          variant: "default",
-          className: "bg-green-500",
+          title: 'Success',
+          description: 'Room joined successfully',
+          variant: 'default',
+          className: 'bg-green-500',
         });
-      router.push("/dashboard/rooms");
-      }else{
-      toast({
-        title: "Error",
-        description: "Failed to join room. Please try again.",
-        variant: "destructive",
-        className: "bg-red-600",
-      });
-      router.push("/dashboard/rooms");
+        router.push('/dashboard/rooms');
+      } else {
+        toast({
+          title: 'Error',
+          description: 'Failed to join room. Please try again.',
+          variant: 'destructive',
+          className: 'bg-red-600',
+        });
+        router.push('/dashboard/rooms');
       }
     } catch (error) {
       console.error(error);

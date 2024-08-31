@@ -1,21 +1,21 @@
-import { NextResponse } from "next/server";
-import prisma from "../../../../../db/db";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../../../../../lib/auth";
-import { GenerateRoomCode } from "../../../../../lib/roomCode";
+import { NextResponse } from 'next/server';
+import prisma from '../../../../../db/db';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../../../../../lib/auth';
+import { GenerateRoomCode } from '../../../../../lib/roomCode';
 
 export async function POST(req: Request, res: Response) {
   try {
     const session = await getServerSession(authOptions);
     if (!session || !session.user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
     const { roomName } = await req.json();
 
-    console.log("Recieved roomName:", roomName);
+    console.log('Recieved roomName:', roomName);
 
-    if (!roomName || typeof roomName !== "string" || roomName.length < 3) {
-      return NextResponse.json({ error: "Invalid room name" }, { status: 400 });
+    if (!roomName || typeof roomName !== 'string' || roomName.length < 3) {
+      return NextResponse.json({ error: 'Invalid room name' }, { status: 400 });
     }
 
     const roomCode: string = await GenerateRoomCode();
@@ -49,7 +49,7 @@ export async function POST(req: Request, res: Response) {
         data: {
           roomId: newRoom.id,
           message: `${
-            session.user.leetCodeUsername || "A new user"
+            session.user.leetCodeUsername || 'A new user'
           } created the room ${roomName}`,
         },
       });
@@ -58,10 +58,10 @@ export async function POST(req: Request, res: Response) {
 
     return NextResponse.json(newRoom, { status: 201 });
   } catch (err) {
-    console.error("Error creating room", err);
+    console.error('Error creating room', err);
     return NextResponse.json(
-      { error: "Internal Server Error" },
-      { status: 500 }
+      { error: 'Internal Server Error' },
+      { status: 500 },
     );
   }
 }

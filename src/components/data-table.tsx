@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import * as React from "react";
+import * as React from 'react';
 import {
   ColumnDef,
   flexRender,
@@ -10,7 +10,7 @@ import {
   SortingState,
   ColumnFiltersState,
   getFilteredRowModel,
-} from "@tanstack/react-table";
+} from '@tanstack/react-table';
 
 import {
   Table,
@@ -19,11 +19,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { ArrowUpDown, ArrowUp, ArrowDown } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+} from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface RoomParticipant {
   user: {
@@ -43,12 +43,12 @@ interface RoomParticipant {
 
 const columns: ColumnDef<RoomParticipant>[] = [
   {
-    accessorKey: "user.leetCodeUsername",
-    header: "Username",
+    accessorKey: 'user.leetCodeUsername',
+    header: 'Username',
     cell: ({ row }) => (
       <div className="flex items-center space-x-2">
         <Avatar className="h-8 w-8">
-          <AvatarImage src={row.original.user.image || ""} />
+          <AvatarImage src={row.original.user.image || ''} />
           {/* console.log(row.original.user.image) */}
           <AvatarFallback className="text-black">
             {row.original.user.leetCodeUsername?.slice(0, 2).toUpperCase()}
@@ -59,19 +59,20 @@ const columns: ColumnDef<RoomParticipant>[] = [
     ),
   },
   {
-    accessorKey: "stats.easyQuestionsSolved",
+    accessorKey: 'stats.easyQuestionsSolved',
     header: ({ column }) => {
       const isSorted = column.getIsSorted();
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(isSorted === "asc")}
-          className="whitespace-nowrap">
+          onClick={() => column.toggleSorting(isSorted === 'asc')}
+          className="whitespace-nowrap"
+        >
           <span className="hidden sm:inline">Easy</span>
           <span className="sm:hidden">EZ</span>
-          {isSorted === "desc" ? (
+          {isSorted === 'desc' ? (
             <ArrowUp className="ml-2 h-4 w-4" />
-          ) : isSorted === "asc" ? (
+          ) : isSorted === 'asc' ? (
             <ArrowDown className="ml-2 h-4 w-4" />
           ) : (
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -84,19 +85,20 @@ const columns: ColumnDef<RoomParticipant>[] = [
     ),
   },
   {
-    accessorKey: "stats.mediumQuestionsSolved",
+    accessorKey: 'stats.mediumQuestionsSolved',
     header: ({ column }) => {
       const isSorted = column.getIsSorted();
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(isSorted === "asc")}
-          className="whitespace-nowrap">
+          onClick={() => column.toggleSorting(isSorted === 'asc')}
+          className="whitespace-nowrap"
+        >
           <span className="hidden sm:inline">Medium</span>
           <span className="sm:hidden">MD</span>
-          {isSorted === "desc" ? (
+          {isSorted === 'desc' ? (
             <ArrowUp className="ml-2 h-4 w-4" />
-          ) : isSorted === "asc" ? (
+          ) : isSorted === 'asc' ? (
             <ArrowDown className="ml-2 h-4 w-4" />
           ) : (
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -109,19 +111,20 @@ const columns: ColumnDef<RoomParticipant>[] = [
     ),
   },
   {
-    accessorKey: "stats.hardQuestionsSolved",
+    accessorKey: 'stats.hardQuestionsSolved',
     header: ({ column }) => {
       const isSorted = column.getIsSorted();
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(isSorted === "asc")}
-          className="whitespace-nowrap">
+          onClick={() => column.toggleSorting(isSorted === 'asc')}
+          className="whitespace-nowrap"
+        >
           <span className="hidden sm:inline">Hard</span>
           <span className="sm:hidden">HD</span>
-          {isSorted === "desc" ? (
+          {isSorted === 'desc' ? (
             <ArrowUp className="ml-2 h-4 w-4" />
-          ) : isSorted === "asc" ? (
+          ) : isSorted === 'asc' ? (
             <ArrowDown className="ml-2 h-4 w-4" />
           ) : (
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -134,19 +137,20 @@ const columns: ColumnDef<RoomParticipant>[] = [
     ),
   },
   {
-    accessorKey: "stats.contestRating",
+    accessorKey: 'stats.contestRating',
     header: ({ column }) => {
       const isSorted = column.getIsSorted();
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(isSorted === "asc")}
-          className="whitespace-nowrap">
+          onClick={() => column.toggleSorting(isSorted === 'asc')}
+          className="whitespace-nowrap"
+        >
           <span className="hidden sm:inline">Rating</span>
           <span className="sm:hidden">RT</span>
-          {isSorted === "desc" ? (
+          {isSorted === 'desc' ? (
             <ArrowUp className="ml-2 h-4 w-4" />
-          ) : isSorted === "asc" ? (
+          ) : isSorted === 'asc' ? (
             <ArrowDown className="ml-2 h-4 w-4" />
           ) : (
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -154,22 +158,23 @@ const columns: ColumnDef<RoomParticipant>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div>{row.original.stats?.contestRating || "N/A"}</div>,
+    cell: ({ row }) => <div>{row.original.stats?.contestRating || 'N/A'}</div>,
   },
   {
-    accessorKey: "stats.globalRanking",
+    accessorKey: 'stats.globalRanking',
     header: ({ column }) => {
       const isSorted = column.getIsSorted();
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(isSorted === "asc")}
-          className="whitespace-nowrap">
+          onClick={() => column.toggleSorting(isSorted === 'asc')}
+          className="whitespace-nowrap"
+        >
           <span className="hidden sm:inline">Ranking</span>
           <span className="sm:hidden">RN</span>
-          {isSorted === "desc" ? (
+          {isSorted === 'desc' ? (
             <ArrowUp className="ml-2 h-4 w-4" />
-          ) : isSorted === "asc" ? (
+          ) : isSorted === 'asc' ? (
             <ArrowDown className="ml-2 h-4 w-4" />
           ) : (
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -177,22 +182,23 @@ const columns: ColumnDef<RoomParticipant>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => <div>{row.original.stats?.globalRanking || "N/A"}</div>,
+    cell: ({ row }) => <div>{row.original.stats?.globalRanking || 'N/A'}</div>,
   },
   {
-    accessorKey: "stats.attendedContests",
+    accessorKey: 'stats.attendedContests',
     header: ({ column }) => {
       const isSorted = column.getIsSorted();
       return (
         <Button
           variant="ghost"
-          onClick={() => column.toggleSorting(isSorted === "asc")}
-          className="whitespace-nowrap">
+          onClick={() => column.toggleSorting(isSorted === 'asc')}
+          className="whitespace-nowrap"
+        >
           <span className="hidden sm:inline">Contests</span>
           <span className="sm:hidden">CN</span>
-          {isSorted === "desc" ? (
+          {isSorted === 'desc' ? (
             <ArrowUp className="ml-2 h-4 w-4" />
-          ) : isSorted === "asc" ? (
+          ) : isSorted === 'asc' ? (
             <ArrowDown className="ml-2 h-4 w-4" />
           ) : (
             <ArrowUpDown className="ml-2 h-4 w-4" />
@@ -225,7 +231,7 @@ const columns: ColumnDef<RoomParticipant>[] = [
 export function DataTable({ data }: { data: RoomParticipant[] }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
+    [],
   );
 
   const table = useReactTable({
@@ -254,12 +260,13 @@ export function DataTable({ data }: { data: RoomParticipant[] }) {
                     return (
                       <TableHead
                         key={header.id}
-                        className="text-white text-center">
+                        className="text-white text-center"
+                      >
                         {header.isPlaceholder
                           ? null
                           : flexRender(
                               header.column.columnDef.header,
-                              header.getContext()
+                              header.getContext(),
                             )}
                       </TableHead>
                     );
@@ -273,12 +280,13 @@ export function DataTable({ data }: { data: RoomParticipant[] }) {
                   <TableRow
                     className="text-white"
                     key={row.id}
-                    data-state={row.getIsSelected() && "selected"}>
+                    data-state={row.getIsSelected() && 'selected'}
+                  >
                     {row.getVisibleCells().map((cell) => (
                       <TableCell key={cell.id} className="text-center">
                         {flexRender(
                           cell.column.columnDef.cell,
-                          cell.getContext()
+                          cell.getContext(),
                         )}
                       </TableCell>
                     ))}
@@ -288,7 +296,8 @@ export function DataTable({ data }: { data: RoomParticipant[] }) {
                 <TableRow>
                   <TableCell
                     colSpan={columns.length}
-                    className="h-24 text-center">
+                    className="h-24 text-center"
+                  >
                     No results.
                   </TableCell>
                 </TableRow>

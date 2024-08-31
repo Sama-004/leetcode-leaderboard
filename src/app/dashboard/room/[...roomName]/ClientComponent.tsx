@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useCallback } from "react";
-import axios from "axios";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { DataTable } from "@/components/data-table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import LeaveRoom from "./LeaveRoom";
-import InviteButton from "./InviteButton";
+import { useState, useEffect, useCallback } from 'react';
+import axios from 'axios';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { DataTable } from '@/components/data-table';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import LeaveRoom from './LeaveRoom';
+import InviteButton from './InviteButton';
 
 interface Notification {
   id: string;
@@ -60,21 +60,21 @@ export default function ClientComponent({
   const [unreadNotifications, setUnreadNotifications] = useState<number>(0);
 
   const colorMap: { [key: string]: string } = {
-    green: "text-[hsl(180,74%,42%)]",
-    yellow: "text-[hsl(43,100%,50%)]",
-    red: "text-[hsl(0,91%,59%)]",
+    green: 'text-[hsl(180,74%,42%)]',
+    yellow: 'text-[hsl(43,100%,50%)]',
+    red: 'text-[hsl(0,91%,59%)]',
   };
 
   const updateUnreadCount = useCallback(
     (notifs: Notification[]) => {
       const lastReadTimestamp =
-        localStorage.getItem(`lastRead_${roomName}`) || "0";
+        localStorage.getItem(`lastRead_${roomName}`) || '0';
       const unreadCount = notifs.filter(
-        (n) => new Date(n.createdAt) > new Date(lastReadTimestamp)
+        (n) => new Date(n.createdAt) > new Date(lastReadTimestamp),
       ).length;
       setUnreadNotifications(unreadCount);
     },
-    [roomName]
+    [roomName],
   );
 
   const markNotificationsAsRead = useCallback(() => {
@@ -86,13 +86,13 @@ export default function ClientComponent({
   const fetchNotifications = useCallback(async () => {
     try {
       const response = await axios.get<Notification[]>(
-        `/api/room/${roomName}/notifications`
+        `/api/room/${roomName}/notifications`,
       );
       const newNotifications = response.data;
       setNotifications(newNotifications);
       updateUnreadCount(newNotifications);
     } catch (error) {
-      console.error("Failed to fetch notifications", error);
+      console.error('Failed to fetch notifications', error);
     }
   }, [roomName, updateUnreadCount]);
 

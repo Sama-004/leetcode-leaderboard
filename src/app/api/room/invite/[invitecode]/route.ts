@@ -1,19 +1,22 @@
-import { getServerSession } from "next-auth";
-import { authOptions } from "../../../../../../lib/auth";
-import { NextResponse } from "next/server";
-import prisma from "../../../../../../db/db";
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../../../../../../lib/auth';
+import { NextResponse } from 'next/server';
+import prisma from '../../../../../../db/db';
 
 export async function GET(
   req: Request,
-  { params }: { params: { invitecode: string } }
+  { params }: { params: { invitecode: string } },
 ) {
   const session = await getServerSession(authOptions);
   if (!session || !session.user) {
-    return NextResponse.json({ error: "Unauthorized", success: false }, { status: 401 });
+    return NextResponse.json(
+      { error: 'Unauthorized', success: false },
+      { status: 401 },
+    );
   }
 
   const { invitecode } = params;
-  console.log("Received roomCode:", invitecode);
+  console.log('Received roomCode:', invitecode);
 
   try {
     const room = await prisma.room.findUnique({
@@ -24,17 +27,24 @@ export async function GET(
     });
 
     if (!room) {
-      return NextResponse.json({ message: "Room not found", success: false }, { status: 404 });
+      return NextResponse.json(
+        { message: 'Room not found', success: false },
+        { status: 404 },
+      );
     }
 
     const isAlreadyParticipant = room.participants.some(
-      (p: any) => p.userId === session.user.id
+      (p: any) => p.userId === session.user.id,
     );
 
     if (isAlreadyParticipant) {
       return NextResponse.json(
-        { message: "Already a member of the room", roomId: room.id, success: true },
-        { status: 200 }
+        {
+          message: 'Already a member of the room',
+          roomId: room.id,
+          success: true,
+        },
+        { status: 200 },
       );
     }
 
@@ -61,7 +71,7 @@ export async function GET(
         data: {
           roomId: room.id,
           message: `${
-            session.user.leetCodeUsername || "A new user"
+            session.user.leetCodeUsername || 'A new user'
           } joined the room.`,
         },
       });
@@ -70,14 +80,14 @@ export async function GET(
     });
 
     return NextResponse.json(
-      { message: "Room joined successfully", roomId: room.id, success: true },
-      { status: 200 }
+      { message: 'Room joined successfully', roomId: room.id, success: true },
+      { status: 200 },
     );
   } catch (err) {
-    console.error("Error joining the room", err);
+    console.error('Error joining the room', err);
     return NextResponse.json(
-      { error: "Internal server error", success: false },
-      { status: 500 }
+      { error: 'Internal server error', success: false },
+      { status: 500 },
     );
   }
 }

@@ -1,11 +1,11 @@
-import prisma from "../db/db";
+import prisma from '../db/db';
 
 export async function GenerateRoomCode() {
-  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
   let code;
   let isUnique = false;
   while (!isUnique) {
-    code = "";
+    code = '';
     for (let i = 0; i < 6; i++) {
       code += characters.charAt(Math.floor(Math.random() * characters.length));
     }
@@ -15,7 +15,7 @@ export async function GenerateRoomCode() {
     });
     if (!existingCode) {
       isUnique = true;
-      console.log("Generated room code:", code);
+      console.log('Generated room code:', code);
     }
   }
   return code as string;

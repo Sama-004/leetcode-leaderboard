@@ -1,4 +1,4 @@
-import Redis from "ioredis";
+import Redis from 'ioredis';
 
 const redis = new Redis(process.env.REDIS_URL);
 const CACHE_TTL = 60 * 60; // 1 hour in seconds

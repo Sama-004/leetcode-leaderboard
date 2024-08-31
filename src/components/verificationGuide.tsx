@@ -1,6 +1,6 @@
-"use client";
-import React from "react";
-import { LayoutGrid } from "@/components/ui/layout-grid";
+'use client';
+import React from 'react';
+import { LayoutGrid } from '@/components/ui/layout-grid';
 
 export default function VerificationGuide() {
   return (
@@ -74,26 +74,26 @@ const cards = [
   {
     id: 1,
     content: <SkeletonOne />,
-    className: "md:col-span-2",
-    thumbnail: "/ver1.png",
+    className: 'md:col-span-2',
+    thumbnail: '/ver1.png',
   },
   {
     id: 2,
     content: <SkeletonTwo />,
-    className: "col-span-1",
-    thumbnail: "/ver2.png",
+    className: 'col-span-1',
+    thumbnail: '/ver2.png',
   },
   {
     id: 3,
     content: <SkeletonThree />,
-    className: "md:col-span-2",
-    thumbnail: "/ver3.png",
+    className: 'md:col-span-2',
+    thumbnail: '/ver3.png',
   },
   {
     id: 4,
     content: <SkeletonFour />,
-    className: "col-span-1",
-    thumbnail: "/ver4.png",
+    className: 'col-span-1',
+    thumbnail: '/ver4.png',
   },
 ];
 
