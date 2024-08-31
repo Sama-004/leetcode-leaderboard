@@ -72,7 +72,8 @@ export async function GET(
           roomId: room.id,
           message: `${
             session.user.leetCodeUsername || 'A new user'
-          } joined the room.`,
+          } joined the room`,
+          color: 'join',
         },
       });
 

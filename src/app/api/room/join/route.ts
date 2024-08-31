@@ -59,9 +59,10 @@ export async function POST(req: Request, res: Response) {
       await prisma.notification.create({
         data: {
           roomId: room.id,
+          color: 'join',
           message: `${
             session.user.leetCodeUsername || 'A new user'
-          } joined the room.`,
+          } joined the room`,
         },
       });
       return updatedRoom;

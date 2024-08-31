@@ -33,7 +33,8 @@ export async function POST(
     await prisma.notification.create({
       data: {
         roomId: room.id,
-        message: `${session.user.leetCodeUsername} has left the room.`,
+        message: `${session.user.leetCodeUsername} has left the room`,
+        color: 'leave',
       },
     });
 

@@ -51,6 +51,7 @@ export async function POST(req: Request, res: Response) {
           message: `${
             session.user.leetCodeUsername || 'A new user'
           } created the room ${roomName}`,
+          color: 'blue',
         },
       });
       return newRoom;

@@ -63,6 +63,9 @@ export default function ClientComponent({
     green: 'text-[hsl(180,74%,42%)]',
     yellow: 'text-[hsl(43,100%,50%)]',
     red: 'text-[hsl(0,91%,59%)]',
+    join: 'text-green-500',
+    blue: 'text-blue-500',
+    leave: 'text-red-500',
   };
 
   const updateUnreadCount = useCallback(
