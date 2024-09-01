@@ -47,12 +47,12 @@ interface RoomParticipant {
 interface ClientComponentProps {
   room: Room;
   initialNotifications: Notification[];
-  roomName: string;
+  roomId: string;
 }
 
 export default function ClientComponent({
   room,
-  roomName,
+  roomId,
   initialNotifications,
 }: ClientComponentProps) {
   const [notifications, setNotifications] =
@@ -71,25 +71,25 @@ export default function ClientComponent({
   const updateUnreadCount = useCallback(
     (notifs: Notification[]) => {
       const lastReadTimestamp =
-        localStorage.getItem(`lastRead_${roomName}`) || '0';
+        localStorage.getItem(`lastRead_${roomId}`) || '0';
       const unreadCount = notifs.filter(
         (n) => new Date(n.createdAt) > new Date(lastReadTimestamp),
       ).length;
       setUnreadNotifications(unreadCount);
     },
-    [roomName],
+    [roomId],
   );
 
   const markNotificationsAsRead = useCallback(() => {
     const now = new Date().toISOString();
-    localStorage.setItem(`lastRead_${roomName}`, now);
+    localStorage.setItem(`lastRead_${roomId}`, now);
     setUnreadNotifications(0);
-  }, [roomName]);
+  }, [roomId]);
 
   const fetchNotifications = useCallback(async () => {
     try {
       const response = await axios.get<Notification[]>(
-        `/api/room/${roomName}/notifications`,
+        `/api/room/${roomId}/notifications`,
       );
       const newNotifications = response.data;
       setNotifications(newNotifications);
@@ -97,7 +97,7 @@ export default function ClientComponent({
     } catch (error) {
       console.error('Failed to fetch notifications', error);
     }
-  }, [roomName, updateUnreadCount]);
+  }, [roomId, updateUnreadCount]);
 
   useEffect(() => {
     fetchNotifications(); // Fetch notifications immediately on mount
@@ -112,7 +112,7 @@ export default function ClientComponent({
       <h1 className="text-xl sm:text-2xl font-bold mb-4">{room.name}</h1>
       <p className="text-sm sm:text-base">Room Code: {room.code}</p>
       <InviteButton roomCode={room.code} />
-      <LeaveRoom roomName={roomName} />
+      <LeaveRoom roomId={roomId} />
       <p className="text-sm sm:text-base">TODO: Add created at time and date</p>
       <Tabs defaultValue="ranking" className="mt-6">
         <TabsList className="bg-black text-white">

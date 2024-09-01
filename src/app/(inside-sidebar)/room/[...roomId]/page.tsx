@@ -5,7 +5,7 @@ import ClientComponent from './ClientComponent';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../../../lib/auth';
 
-async function getRoomDetails(roomName: string) {
+async function getRoomDetails(roomId: string) {
   try {
     const session = await getServerSession(authOptions);
     if (!session || !session.accessToken) {
@@ -19,7 +19,7 @@ async function getRoomDetails(roomName: string) {
       },
     };
     const response = await axios.get(
-      `http://localhost:3000/api/room/${roomName}`,
+      `http://localhost:3000/api/room/${roomId}`,
       config,
     );
     return response.data;
@@ -28,7 +28,7 @@ async function getRoomDetails(roomName: string) {
     return null;
   }
 }
-async function getNotifications(roomName: string) {
+async function getNotifications(roomId: string) {
   try {
     const session = await getServerSession(authOptions);
     if (!session || !session.user) {
@@ -42,7 +42,7 @@ async function getNotifications(roomName: string) {
       },
     };
     const response = await axios.get(
-      `http://localhost:3000/api/room/${roomName}/notifications`,
+      `http://localhost:3000/api/room/${roomId}/notifications`,
       config,
     );
 
@@ -54,11 +54,11 @@ async function getNotifications(roomName: string) {
 }
 
 export async function generateMetadata(
-  { params }: { params: { roomName: string } },
+  { params }: { params: { roomId: string } },
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
   try {
-    const room = await getRoomDetails(params.roomName);
+    const room = await getRoomDetails(params.roomId);
     return {
       title: room && room.name ? `${room.name}` : 'Room',
     };
@@ -71,13 +71,13 @@ export async function generateMetadata(
 }
 
 type Props = {
-  params: { roomName: string };
+  params: { roomId: string };
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
 export default async function Page({ params }: Props) {
-  const room = await getRoomDetails(params.roomName);
-  const notifications = await getNotifications(params.roomName);
+  const room = await getRoomDetails(params.roomId);
+  const notifications = await getNotifications(params.roomId);
   if (!room) {
     return <div>Room not found</div>;
   }
@@ -85,7 +85,7 @@ export default async function Page({ params }: Props) {
   return (
     <ClientComponent
       room={room}
-      roomName={params.roomName}
+      roomId={params.roomId}
       initialNotifications={notifications}
     />
   );

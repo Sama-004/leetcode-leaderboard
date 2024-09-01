@@ -17,18 +17,18 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 interface LeaveRoomProps {
-  roomName: string;
+  roomId: string;
 }
 
-export default function LeaveRoom({ roomName }: LeaveRoomProps) {
+export default function LeaveRoom({ roomId }: LeaveRoomProps) {
   const [isLeavingRoom, setIsLeavingRoom] = useState(false);
   const { toast } = useToast();
   const router = useRouter();
   const handleLeaveRoom = async () => {
     setIsLeavingRoom(true);
     try {
-      console.log('Id sent from frontend', roomName);
-      const response = await axios.post(`/api/room/${roomName}/leave`);
+      console.log('Id sent from frontend to leave room', roomId);
+      const response = await axios.post(`/api/room/${roomId}/leave`);
       if (response.status === 200) {
         toast({
           title: 'Success',
