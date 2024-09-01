@@ -96,7 +96,7 @@ export default function Page() {
                 {/* Label owner for rooms created by me */}
                 <p>Creator: {room.creator.leetCodeUsername}</p>
                 <p>Participants: {room.participants.length}</p>
-                <Link href={`/dashboard/room/${room.id}`} passHref>
+                <Link href={`/room/${room.id}`} passHref>
                   <Button className="mt-2 bg-green-500 hover:bg-green-600">
                     Enter Room
                   </Button>

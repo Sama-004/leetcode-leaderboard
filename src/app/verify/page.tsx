@@ -59,7 +59,9 @@ export default function Verify() {
           description: `${response.data.message}`,
           className: 'bg-green-500',
         });
-        router.push('/dashboard?redirectVerify=true');
+        // router.push('/dashboard?redirectVerify=true');
+        // TODO: Check if toast is working if not then also add redirect verification true to rooms
+        router.push('/rooms');
       } else {
         toast({
           variant: 'destructive',

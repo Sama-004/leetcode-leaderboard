@@ -35,7 +35,7 @@ export default function LeaveRoom({ roomName }: LeaveRoomProps) {
           description: 'You have left the room.',
           variant: 'default',
         });
-        router.push('/dashboard/rooms');
+        router.push('/rooms');
       }
     } catch (error) {
       console.error('Failed to leave room', error);

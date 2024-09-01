@@ -31,7 +31,7 @@ export default function Page({ params }: { params: { invitecode: string } }) {
           variant: 'default',
           className: 'bg-green-500',
         });
-        router.push('/dashboard/rooms');
+        router.push('/rooms');
       } else {
         toast({
           title: 'Error',
@@ -39,7 +39,7 @@ export default function Page({ params }: { params: { invitecode: string } }) {
           variant: 'destructive',
           className: 'bg-red-600',
         });
-        router.push('/dashboard/rooms');
+        router.push('/rooms');
       }
     } catch (error) {
       console.error(error);

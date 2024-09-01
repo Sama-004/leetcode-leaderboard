@@ -19,7 +19,7 @@ export default function Nav() {
       <aside className="fixed inset-y-0 left-0 z-10 flex h-full w-14 flex-col border-r border-[#ecebff] bg-zinc-900 sm:w-60 hover:bg-black">
         <div className="flex h-16 items-center justify-between px-4">
           <Link
-            href="/dashboard"
+            href="/rooms"
             className="flex items-center gap-2"
             prefetch={false}
           >
@@ -31,7 +31,7 @@ export default function Nav() {
         </div>
         <nav className="flex flex-1 flex-col items-start gap-2 px-2 py-4 sm:px-4">
           <Link
-            href="/dashboard/rooms"
+            href="/rooms"
             className="flex h-9 w-full items-center gap-3 rounded-md px-3 text-muted-foreground transition-colors hover:text-foreground sm:gap-4 hover:bg-gray-600"
             prefetch={false}
           >
@@ -40,7 +40,7 @@ export default function Nav() {
             <span className="hidden text-white sm:block">Rooms</span>
           </Link>
           <Link
-            href="/dashboard/rooms/new"
+            href="/rooms/new"
             className="flex h-9 w-full items-center gap-3 rounded-md px-3 text-muted-foreground transition-colors hover:text-foreground sm:gap-4 hover:bg-gray-600"
             prefetch={false}
           >
@@ -71,16 +71,16 @@ export default function Nav() {
           </Link>
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <NavAvatar />
               {/* Leetcode avatar */}
+              <NavAvatar />
             </DropdownMenuTrigger>
             <DropdownMenuContent
               align="end"
               className="bg-zinc-900 border-black"
             >
               <DropdownMenuItem className="pointer-events-none bg-zinc-900 text-white hover:bg-gray-600">
-                <NavUsername />
                 {/* Leetcode username */}
+                <NavUsername />
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <NavSignOutButton />

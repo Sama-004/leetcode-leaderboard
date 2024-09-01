@@ -4,12 +4,12 @@ import { redirect } from 'next/navigation';
 
 export default withAuth(
   function middleware(request: NextRequestWithAuth) {
-    // Redirect verified users from /verify to /dashboard
+    // Redirect verified users from /verify to /rooms
     if (
       request.nextUrl.pathname === '/verify' &&
       request.nextauth.token?.isVerified
     ) {
-      return NextResponse.redirect(new URL('/dashboard', request.url));
+      return NextResponse.redirect(new URL('/rooms', request.url));
     }
 
     return NextResponse.next();
@@ -21,8 +21,8 @@ export default withAuth(
         if (req.nextUrl.pathname === '/verify') {
           return !!token;
         }
-        // Require verification for /dashboard
-        if (req.nextUrl.pathname.startsWith('/dashboard')) {
+        // Require verification for /rooms
+        if (req.nextUrl.pathname.startsWith('/rooms')) {
           return !!token && token.isVerified === true;
         }
         // Allow access to all other routes
@@ -33,5 +33,5 @@ export default withAuth(
 );
 
 export const config = {
-  matcher: ['/verify', '/dashboard/', '/dashboard/:path*'],
+  matcher: ['/verify', '/rooms/', '/rooms/:path*'],
 };

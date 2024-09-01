@@ -48,7 +48,7 @@ export default function Page() {
     setIsLoading(true);
     try {
       const response = await axios.post('/api/room/join', { roomCode });
-      router.push(`/dashboard/room/${response.data.id}`);
+      router.push(`/room/${response.data.id}`);
     } catch (error) {
       console.error(error);
       toast({
@@ -73,7 +73,7 @@ export default function Page() {
     setIsLoading(true);
     try {
       const response = await axios.post('/api/room/create', { roomName });
-      router.push(`/dashboard/room/${response.data.id}`);
+      router.push(`/room/${response.data.id}`);
     } catch (error) {
       toast({
         title: 'Error',
