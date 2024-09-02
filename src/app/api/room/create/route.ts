@@ -57,7 +57,7 @@ export async function POST(req: Request, res: Response) {
       return newRoom;
     });
 
-    return NextResponse.json(newRoom, { status: 201 });
+    return NextResponse.json(newRoom, { status: 200 });
   } catch (err) {
     console.error('Error creating room', err);
     return NextResponse.json(

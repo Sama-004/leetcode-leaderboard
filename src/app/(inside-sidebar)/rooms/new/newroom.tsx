@@ -36,7 +36,14 @@ export function JoinRoom() {
     setIsLoading(true);
     try {
       const response = await axios.post('/api/room/join', { roomCode });
-      router.push(`/room/${response.data.id}`);
+      if (response.status === 200) {
+        toast({
+          description: 'Joined room successfully',
+          variant: 'default',
+          className: 'bg-green-500',
+        });
+        router.push(`/room/${response.data.id}`);
+      }
     } catch (error) {
       console.error(error);
       toast({
@@ -103,7 +110,15 @@ export function CreateRoom() {
     setIsLoading(true);
     try {
       const response = await axios.post('/api/room/create', { roomName });
-      router.push(`/room/${response.data.id}`);
+      if (response.status === 200) {
+        toast({
+          title: 'Success',
+          description: 'Created Room successfully',
+          variant: 'default',
+          className: 'bg-green-500',
+        });
+        router.push(`/room/${response.data.id}`);
+      }
     } catch (error) {
       toast({
         title: 'Error',
