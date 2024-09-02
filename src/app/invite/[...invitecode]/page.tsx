@@ -10,7 +10,6 @@ export default function Page({ params }: { params: { invitecode: string } }) {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
-  console.log('Code is:', params.invitecode);
 
   useEffect(() => {
     joinRoom();
@@ -20,11 +19,10 @@ export default function Page({ params }: { params: { invitecode: string } }) {
     try {
       console.log('Invite code being sent:', params.invitecode);
       const response = await axios.get(`/api/room/invite/${params.invitecode}`);
-      const data = response.data;
       if (response) {
         setLoading(false);
       }
-      if (data.success) {
+      if (response.status === 200) {
         toast({
           title: 'Success',
           description: 'Room joined successfully',
@@ -42,6 +40,12 @@ export default function Page({ params }: { params: { invitecode: string } }) {
         router.push('/rooms');
       }
     } catch (error) {
+      router.push('/rooms');
+      toast({
+        description: 'Internal server error',
+        variant: 'destructive',
+        className: 'bg-red-600',
+      });
       console.error(error);
     }
   };
