@@ -38,10 +38,19 @@ export async function POST(
       },
     });
 
-    if (room.participants.length === 1) {
-      await prisma.room.delete({
-        where: { id: room.id },
-      });
+    const remainingParticipants = await prisma.roomParticipant.count({
+      where: { roomId: room.id },
+    });
+
+    if (remainingParticipants === 0) {
+      await prisma.$transaction([
+        prisma.notification.deleteMany({
+          where: { roomId: room.id },
+        }),
+        prisma.room.delete({
+          where: { id: room.id },
+        }),
+      ]);
     }
 
     return NextResponse.json(
