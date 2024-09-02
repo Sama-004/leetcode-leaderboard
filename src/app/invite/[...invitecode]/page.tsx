@@ -19,6 +19,7 @@ export default function Page({ params }: { params: { invitecode: string } }) {
     try {
       console.log('Invite code being sent:', params.invitecode);
       const response = await axios.get(`/api/room/invite/${params.invitecode}`);
+      const roomId = response.data.roomId;
       if (response) {
         setLoading(false);
       }
@@ -29,7 +30,7 @@ export default function Page({ params }: { params: { invitecode: string } }) {
           variant: 'default',
           className: 'bg-green-500',
         });
-        router.push('/rooms');
+        router.push(`/room/${roomId}`);
       } else {
         toast({
           title: 'Error',
