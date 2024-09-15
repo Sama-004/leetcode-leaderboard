@@ -1,14 +1,35 @@
 'use client';
-
-import { Textarea } from '@/components/ui/textarea';
-import { getSession, signOut, useSession } from 'next-auth/react';
+import { useState, KeyboardEvent } from 'react';
+import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { KeyboardEvent, useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { ArrowRight, LogIn } from 'lucide-react';
 import axios from 'axios';
 import { useToast } from '@/components/ui/use-toast';
-import VerificationGuide from '@/components/verificationGuide';
 import { useRouter } from 'next/navigation';
-import { LoadingSpinner } from '@/components/ui/spinner';
+
+const steps = [
+  'Go to your LeetCode profile and click on Edit profile',
+  'On the basic info tab, at the bottom of the page add vim as skill and click on save',
+  'Now vim should now be visible on your profile under skills',
+  'Now you are ready to verify your account',
+];
+
+function VerificationStep({ number, text }: { number: number; text: string }) {
+  return (
+    <div className="flex items-center space-x-4 p-4 rounded-lg shadow bg-zinc-800">
+      <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold bg-white text-black">
+        {number}
+      </div>
+      <div className="flex-grow">
+        <p className="font-medium">{text}</p>
+      </div>
+      {number < steps.length && (
+        <ArrowRight className="flex-shrink-0 text-gray-400" />
+      )}
+    </div>
+  );
+}
 
 export default function Verify() {
   const [username, setUsername] = useState<string>('');
@@ -16,12 +37,13 @@ export default function Verify() {
   const { data: session, update } = useSession();
   const router = useRouter();
 
-  const submitUsername = async () => {
-    //TODO: Add loader
+  const submitUsername = async (e: React.FormEvent) => {
+    e.preventDefault();
     if (!session?.user?.id) {
       toast({
         variant: 'destructive',
-        title: 'You must be logged in to verify your account',
+        title: 'Authentication Error',
+        description: 'You must be logged in to verify your account',
       });
       return;
     }
@@ -31,6 +53,7 @@ export default function Verify() {
         username,
         userId: session.user.id,
       });
+
       if (response.status === 200) {
         if (session && session.user) {
           await update({
@@ -45,93 +68,105 @@ export default function Verify() {
         }
 
         toast({
-          title: 'Verification successful',
-          description: `${response.data.message}`,
+          title: 'Verification Successful',
+          description: 'Your account has been verified.',
           className: 'bg-green-500',
         });
         router.push('/rooms');
       }
-    } catch (err) {
-      if (axios.isAxiosError(err)) {
-        const status = err.response?.status;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const status = error.response?.status;
         switch (status) {
           case 409:
             toast({
               variant: 'destructive',
               title: 'Username Conflict',
-              description: 'Username is already verified',
-            });
-            break;
-          case 400:
-            toast({
-              variant: 'destructive',
-              title: 'Vim skill not found',
-              description: 'Please add vim as a skill and try again',
+              description: 'This username is already verified by someone else.',
             });
             break;
           case 404:
             toast({
               variant: 'destructive',
-              title: 'User not found',
-              description: 'Please check the username and try again',
+              title: 'User Not Found',
+              description: 'The provided username was not found on LeetCode.',
+            });
+            break;
+          case 400:
+            toast({
+              variant: 'destructive',
+              title: 'Verification Failed',
+              description:
+                'Vim skill not found. Please add it to your LeetCode profile and try again.',
             });
             break;
           default:
             toast({
               variant: 'destructive',
               title: 'Error',
-              description:
-                'An error occurred while verifying your account. Please try again.',
+              description: 'An unexpected error occurred. Please try again.',
             });
         }
       } else {
         toast({
           variant: 'destructive',
           title: 'Error',
-          description: 'Internal server error',
+          description: 'An unexpected error occurred. Please try again.',
         });
       }
     }
   };
-  const hadnleKeyDown = (event: KeyboardEvent) => {
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      submitUsername();
+      submitUsername(event as any);
     }
     if (event.key === ' ') {
       event.preventDefault();
       toast({
         variant: 'destructive',
-        title: 'Username cannot contain spaces',
+        title: 'Invalid Input',
+        description: 'Username cannot contain spaces',
       });
     }
   };
 
   return (
-    <div>
-      <div className="flex flex-col items-center p-10">
-        <button onClick={() => signOut()}>Sign out</button>
-        <div className="flex flex-col md:flex-row gap-2 w-full max-w-md">
-          <Textarea
-            className="text-black w-full md:w-80 resize-none h-15 md:h-10"
-            placeholder="Enter your leetcode username here."
-            onKeyDown={hadnleKeyDown}
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="max-w-2xl w-full space-y-8">
+        <h1 className="text-3xl font-bold text-center">
+          Verify Your Leetcode Account
+        </h1>
+        <form onSubmit={submitUsername} className="space-y-4">
+          <Input
+            type="text"
+            placeholder="Enter your LeetCode username"
+            value={username}
             onChange={(e) => setUsername(e.target.value)}
+            onKeyDown={handleKeyDown}
+            className="w-full text-black"
           />
           <Button
-            onClick={submitUsername}
-            className="bg-yellow-500 hover:bg-yellow-300 text-black mt-2 md:mt-0"
+            type="submit"
+            className="w-full bg-yellow-500 hover:bg-yellow-300 text-black relative py-2"
           >
-            Verify
+            <span className="absolute left-1/2 transform -translate-x-1/2">
+              Verify Username
+            </span>
+            <LogIn className="absolute right-4 top-1/2 transform -translate-y-1/2 h-4 w-4" />
           </Button>
+        </form>
+        <div className="space-y-6">
+          <h2 className="text-xl font-semibold text-center">
+            How to verify your account
+          </h2>
+          <div className="space-y-4">
+            {steps.map((step, index) => (
+              <VerificationStep key={index} number={index + 1} text={step} />
+            ))}
+          </div>
         </div>
-        <h1 className="text-2xl font-semibold mt-10">
-          Add vim as skill before verifying. The steps to do so are given below
-        </h1>
-      </div>
-      <div>
-        {/* TODO: Send username here and show in one of the cards as links */}
-        <VerificationGuide />
       </div>
     </div>
   );
