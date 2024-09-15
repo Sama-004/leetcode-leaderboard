@@ -52,7 +52,7 @@ export function UsernameInput() {
         toast({
           title: 'Verification Successful',
           description: 'Your account has been verified.',
-          className: 'bg-green-500',
+          className: 'bg-green-500 border-none',
         });
         router.push('/rooms');
       }

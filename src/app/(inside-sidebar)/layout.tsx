@@ -1,5 +1,5 @@
-import Nav from '@/components/Nav';
 import type { Metadata } from 'next';
+import Sidenav from './sidebar';
 
 // TODO: Remove this and add this logic in the page components
 export const metadata: Metadata = {
@@ -9,11 +9,11 @@ export const metadata: Metadata = {
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-screen">
-      <Nav />
-      <div className="flex-1 ml-20 mt-20 sm:ml-60 lg:ml-60">
-        <main className="p-4">{children}</main>
-      </div>
+    <div className="flex h-screen overflow-hidden">
+      <Sidenav />
+      <main className="flex-1 overflow-y-auto p-4 md:p-6 pt-16 md:pt-6">
+        {children}
+      </main>
     </div>
   );
 }

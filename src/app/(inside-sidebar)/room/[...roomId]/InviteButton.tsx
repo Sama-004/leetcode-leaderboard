@@ -2,6 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { useCallback } from 'react';
+import { Link } from 'lucide-react';
 
 interface InviteButtonProps {
   roomCode: string;
@@ -24,9 +25,8 @@ export default function InviteButton({ roomCode }: InviteButtonProps) {
         navigator.clipboard.writeText(link);
       }
       toast({
-        title: 'Success',
-        description: 'Invite link copied to clipboard',
-        variant: 'default',
+        description: 'Invite Link Copied to Clipboard',
+        className: 'bg-green-500 border-none',
       });
     },
     [generateInviteLink, toast, roomCode],
@@ -38,7 +38,8 @@ export default function InviteButton({ roomCode }: InviteButtonProps) {
       onClick={() => copyInviteLink(roomCode)}
       disabled={!roomCode}
     >
-      Copy Invite Link
+      <Link className="inline-block w-4 h-4 mr-2" />
+      Copy Invite
     </Button>
   );
 }
