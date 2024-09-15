@@ -8,6 +8,7 @@ import axios from 'axios';
 import { useToast } from '@/components/ui/use-toast';
 import VerificationGuide from '@/components/verificationGuide';
 import { useRouter } from 'next/navigation';
+import { LoadingSpinner } from '@/components/ui/spinner';
 
 export default function Verify() {
   const [username, setUsername] = useState<string>('');
@@ -26,22 +27,11 @@ export default function Verify() {
     }
 
     try {
-      console.log('Username going from frontend:', username);
       const response = await axios.post('/api/verify', {
         username,
         userId: session.user.id,
       });
-      console.log('Response from backend:', response.data);
-      if (
-        response.data.message === 'Profile is already verified by someone else'
-      ) {
-        toast({
-          variant: 'destructive',
-          title: 'Username already being used by someone else',
-          description: 'Username already verified by someone else',
-        });
-      }
-      if (response.data.message === 'User verified successfully') {
+      if (response.status === 200) {
         if (session && session.user) {
           await update({
             ...session,
@@ -59,27 +49,49 @@ export default function Verify() {
           description: `${response.data.message}`,
           className: 'bg-green-500',
         });
-        // router.push('/dashboard?redirectVerify=true');
-        // TODO: Check if toast is working if not then also add redirect verification true to rooms
         router.push('/rooms');
+      }
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        const status = err.response?.status;
+        switch (status) {
+          case 409:
+            toast({
+              variant: 'destructive',
+              title: 'Username Conflict',
+              description: 'Username is already verified',
+            });
+            break;
+          case 400:
+            toast({
+              variant: 'destructive',
+              title: 'Vim skill not found',
+              description: 'Please add vim as a skill and try again',
+            });
+            break;
+          case 404:
+            toast({
+              variant: 'destructive',
+              title: 'User not found',
+              description: 'Please check the username and try again',
+            });
+            break;
+          default:
+            toast({
+              variant: 'destructive',
+              title: 'Error',
+              description:
+                'An error occurred while verifying your account. Please try again.',
+            });
+        }
       } else {
         toast({
           variant: 'destructive',
-          title: 'Verification failed',
-          description: response.data.message,
+          title: 'Error',
+          description: 'Internal server error',
         });
       }
-    } catch (err) {
-      console.error('Error sending username to the backend', err);
-      toast({
-        variant: 'destructive',
-        title: 'Error',
-        description:
-          'An error occurred while verifying your account. Please try again.',
-        // TODO: Need to change this message ig
-      });
     }
-    //TODO: Add loader
   };
   const hadnleKeyDown = (event: KeyboardEvent) => {
     if (event.key === 'Enter') {

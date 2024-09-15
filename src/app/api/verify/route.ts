@@ -1,14 +1,9 @@
 import axios from 'axios';
 import prisma from '../../../../db/db';
 import { NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../../../../lib/auth';
 import { fetchUserStats } from '../../../../lib/fetchUserstats';
 
 export async function POST(req: Request, res: Response) {
-  if (req.method !== 'POST') {
-    return NextResponse.json({ error: 'Method not allowed' }, { status: 405 });
-  }
   try {
     const { username, userId } = await req.json();
     console.log('Username received in backend:', username);
@@ -19,7 +14,7 @@ export async function POST(req: Request, res: Response) {
     });
 
     const userExists = await prisma.user.findUnique({
-      where: { leetCodeUsername: username },
+      where: { leetCodeUsername: username, isVerified: true },
     });
 
     if (userExists) {
@@ -96,4 +91,3 @@ export async function POST(req: Request, res: Response) {
     );
   }
 }
-// TODO: Display username already taken if username already exists in the db
