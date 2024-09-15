@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
+import { useCallback, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { DataTable } from '@/components/data-table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import LeaveRoom from './LeaveRoom';
 import InviteButton from './InviteButton';
+import useSWR from 'swr';
+import { toast } from '@/components/ui/use-toast';
 
 interface Notification {
   id: string;
@@ -50,14 +51,24 @@ interface ClientComponentProps {
   roomId: string;
 }
 
-export default function ClientComponent({
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
+export default function RoomPageClient({
   room,
   roomId,
   initialNotifications,
 }: ClientComponentProps) {
-  const [notifications, setNotifications] =
-    useState<Notification[]>(initialNotifications);
-  const [unreadNotifications, setUnreadNotifications] = useState<number>(0);
+  const { data: notifications = initialNotifications, error } = useSWR<
+    Notification[]
+  >(
+    `/api/room/${roomId}/notifications`,
+    fetcher,
+    {
+      refreshInterval: 30000,
+      revalidateOnFocus: true,
+      refreshWhenHidden: true,
+    }, // Refresh every 30 seconds
+  );
 
   const colorMap: { [key: string]: string } = {
     green: 'text-[hsl(180,74%,42%)]',
@@ -72,40 +83,30 @@ export default function ClientComponent({
     (notifs: Notification[]) => {
       const lastReadTimestamp =
         localStorage.getItem(`lastRead_${roomId}`) || '0';
-      const unreadCount = notifs.filter(
+      return notifs.filter(
         (n) => new Date(n.createdAt) > new Date(lastReadTimestamp),
       ).length;
-      setUnreadNotifications(unreadCount);
     },
     [roomId],
   );
 
+  const unreadNotifications = updateUnreadCount(notifications);
+
   const markNotificationsAsRead = useCallback(() => {
     const now = new Date().toISOString();
     localStorage.setItem(`lastRead_${roomId}`, now);
-    setUnreadNotifications(0);
   }, [roomId]);
 
-  const fetchNotifications = useCallback(async () => {
-    try {
-      const response = await axios.get<Notification[]>(
-        `/api/room/${roomId}/notifications`,
-      );
-      const newNotifications = response.data;
-      setNotifications(newNotifications);
-      updateUnreadCount(newNotifications);
-    } catch (error) {
-      console.error('Failed to fetch notifications', error);
-    }
-  }, [roomId, updateUnreadCount]);
-
   useEffect(() => {
-    fetchNotifications(); // Fetch notifications immediately on mount
-    updateUnreadCount(initialNotifications); // Initialize unread count
-
-    const intervalId = setInterval(fetchNotifications, 30000); // check for notifications every 30 seconds
-    return () => clearInterval(intervalId);
-  }, [fetchNotifications, initialNotifications, updateUnreadCount]);
+    if (error) {
+      console.error('Failed to fetch notifications', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to fetch notifications. Please try again.',
+        variant: 'destructive',
+      });
+    }
+  }, [error]);
 
   return (
     <div className="container mx-auto p-4 sm:px-6 lg:px-8">

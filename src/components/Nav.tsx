@@ -20,7 +20,7 @@ import { LayoutGridIcon } from 'lucide-react';
 export default function Nav() {
   return (
     <>
-      <aside className="fixed inset-y-0 left-0 z-10 flex h-full w-14 flex-col border-r border-[#ecebff] bg-zinc-900 sm:w-60 hover:bg-black">
+      <aside className="fixed inset-y-0 left-0 z-10 flex h-full w-14 flex-col border-r border-[#ecebff] bg-zinc-900 sm:w-60">
         <div className="flex h-16 items-center justify-between px-4">
           <Link
             href="/rooms"

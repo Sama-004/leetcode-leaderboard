@@ -1,9 +1,9 @@
 import { Metadata, ResolvingMetadata } from 'next';
 import { headers } from 'next/headers';
 import axios from 'axios';
-import ClientComponent from './ClientComponent';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../../../lib/auth';
+import RoomPageClient from './room-id-client';
 
 async function getRoomDetails(roomId: string) {
   try {
@@ -83,7 +83,7 @@ export default async function Page({ params }: Props) {
   }
 
   return (
-    <ClientComponent
+    <RoomPageClient
       room={room}
       roomId={params.roomId}
       initialNotifications={notifications}
