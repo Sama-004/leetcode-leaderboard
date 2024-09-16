@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { signOut } from 'next-auth/react';
 import {
   Sheet,
   SheetContent,
@@ -34,8 +35,7 @@ function Sidebar({ className }: { className?: string }) {
               <Link key={item.href} href={item.href}>
                 <Button
                   variant="ghost"
-                  className={`w-full justify-start mt-2 hover:bg-gray-500 hover:text-white
-                    ${pathname === item.href ? 'bg-zinc-700 text-white' : ''}`}
+                  className={`w-full justify-start text-zinc-100 hover:text-zinc-100 hover:bg-zinc-800 ${pathname === item.href ? 'bg-zinc-700 text-white' : ''}`}
                 >
                   <item.icon className="mr-2 h-4 w-4" />
                   {item.label}
@@ -45,7 +45,7 @@ function Sidebar({ className }: { className?: string }) {
           </div>
         </div>
       </div>
-      <div className="p-4 border-t border-zinc-700">
+      <div className="p-4 border-t border-zinc-800">
         <div className="flex items-center gap-4 mb-4">
           <NavAvatar />
           <div>
@@ -58,8 +58,9 @@ function Sidebar({ className }: { className?: string }) {
           </div>
         </div>
         <Button
-          className="w-full bg-red-500 hover:bg-red-300"
-          onClick={() => console.log('Sign out')}
+          variant="outline"
+          className="w-full text-zinc-100 bg-zinc-800 hover:bg-zinc-700 hover:text-zinc-100"
+          onClick={() => signOut()}
         >
           <LogOut className="mr-2 h-4 w-4" />
           Sign out
