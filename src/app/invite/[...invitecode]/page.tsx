@@ -28,7 +28,7 @@ export default function Page({ params }: { params: { invitecode: string } }) {
           title: 'Success',
           description: 'Room joined successfully',
           variant: 'default',
-          className: 'bg-green-500',
+          className: 'bg-zinc-800 border-zinc-700 text-zinc-100',
         });
         router.push(`/room/${roomId}`);
       } else {

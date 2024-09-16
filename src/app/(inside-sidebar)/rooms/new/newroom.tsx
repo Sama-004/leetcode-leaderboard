@@ -40,7 +40,7 @@ export function JoinRoom() {
         toast({
           description: 'Joined room successfully',
           variant: 'default',
-          className: 'bg-green-500',
+          className: 'bg-zinc-800 border-zinc-700 text-zinc-100',
         });
         router.push(`/room/${response.data.id}`);
       }
@@ -115,7 +115,7 @@ export function CreateRoom() {
           title: 'Success',
           description: 'Created Room successfully',
           variant: 'default',
-          className: 'bg-green-500',
+          className: 'bg-zinc-800 border-zinc-700 text-zinc-100',
         });
         router.push(`/room/${response.data.id}`);
       }

@@ -1,125 +1,53 @@
-'use client';
+import { ArrowRight } from 'lucide-react';
+import { UsernameInput } from './username-input';
+import type { Metadata } from 'next';
 
-import { Textarea } from '@/components/ui/textarea';
-import { getSession, signOut, useSession } from 'next-auth/react';
-import { Button } from '@/components/ui/button';
-import { KeyboardEvent, useEffect, useState } from 'react';
-import axios from 'axios';
-import { useToast } from '@/components/ui/use-toast';
-import VerificationGuide from '@/components/verificationGuide';
-import { useRouter } from 'next/navigation';
+export const metadata: Metadata = {
+  title: 'Verify',
+  description: 'Verify your LeetCode account to get access to the leaderboards',
+};
+
+const steps = [
+  'Go to your LeetCode profile and click on Edit profile',
+  'On the basic info tab, at the bottom of the page add vim as skill and click on save',
+  'Now vim should now be visible on your profile under skills',
+  'Now you are ready to verify your account',
+];
+
+function VerificationStep({ number, text }: { number: number; text: string }) {
+  return (
+    <div className="flex items-center space-x-4 p-4 rounded-lg shadow bg-zinc-800">
+      <div className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold bg-white text-black">
+        {number}
+      </div>
+      <div className="flex-grow">
+        <p className="font-medium">{text}</p>
+      </div>
+      {number < steps.length && (
+        <ArrowRight className="flex-shrink-0 text-gray-400" />
+      )}
+    </div>
+  );
+}
 
 export default function Verify() {
-  const [username, setUsername] = useState<string>('');
-  const { toast } = useToast();
-  const { data: session, update } = useSession();
-  const router = useRouter();
-
-  const submitUsername = async () => {
-    //TODO: Add loader
-    if (!session?.user?.id) {
-      toast({
-        variant: 'destructive',
-        title: 'You must be logged in to verify your account',
-      });
-      return;
-    }
-
-    try {
-      console.log('Username going from frontend:', username);
-      const response = await axios.post('/api/verify', {
-        username,
-        userId: session.user.id,
-      });
-      console.log('Response from backend:', response.data);
-      if (
-        response.data.message === 'Profile is already verified by someone else'
-      ) {
-        toast({
-          variant: 'destructive',
-          title: 'Username already being used by someone else',
-          description: 'Username already verified by someone else',
-        });
-      }
-      if (response.data.message === 'User verified successfully') {
-        if (session && session.user) {
-          await update({
-            ...session,
-            user: {
-              ...session.user,
-              leetCodeUsername: response.data.user.leetCodeUsername,
-              isVerified: true,
-              image: response.data.user.image,
-            },
-          });
-        }
-
-        toast({
-          title: 'Verification successful',
-          description: `${response.data.message}`,
-          className: 'bg-green-500',
-        });
-        // router.push('/dashboard?redirectVerify=true');
-        // TODO: Check if toast is working if not then also add redirect verification true to rooms
-        router.push('/rooms');
-      } else {
-        toast({
-          variant: 'destructive',
-          title: 'Verification failed',
-          description: response.data.message,
-        });
-      }
-    } catch (err) {
-      console.error('Error sending username to the backend', err);
-      toast({
-        variant: 'destructive',
-        title: 'Error',
-        description:
-          'An error occurred while verifying your account. Please try again.',
-        // TODO: Need to change this message ig
-      });
-    }
-    //TODO: Add loader
-  };
-  const hadnleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      submitUsername();
-    }
-    if (event.key === ' ') {
-      event.preventDefault();
-      toast({
-        variant: 'destructive',
-        title: 'Username cannot contain spaces',
-      });
-    }
-  };
-
   return (
-    <div>
-      <div className="flex flex-col items-center p-10">
-        <button onClick={() => signOut()}>Sign out</button>
-        <div className="flex flex-col md:flex-row gap-2 w-full max-w-md">
-          <Textarea
-            className="text-black w-full md:w-80 resize-none h-15 md:h-10"
-            placeholder="Enter your leetcode username here."
-            onKeyDown={hadnleKeyDown}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <Button
-            onClick={submitUsername}
-            className="bg-yellow-500 hover:bg-yellow-300 text-black mt-2 md:mt-0"
-          >
-            Verify
-          </Button>
-        </div>
-        <h1 className="text-2xl font-semibold mt-10">
-          Add vim as skill before verifying. The steps to do so are given below
+    <div className="min-h-screen flex items-center justify-center p-4">
+      <div className="max-w-2xl w-full space-y-8">
+        <h1 className="text-3xl font-bold text-center">
+          Verify Your Leetcode Account
         </h1>
-      </div>
-      <div>
-        {/* TODO: Send username here and show in one of the cards as links */}
-        <VerificationGuide />
+        <div className="space-y-6">
+          <h2 className="text-xl font-semibold text-center">
+            How to verify your account
+          </h2>
+          <UsernameInput />
+          <div className="space-y-4">
+            {steps.map((step, index) => (
+              <VerificationStep key={index} number={index + 1} text={step} />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
