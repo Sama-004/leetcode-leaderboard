@@ -14,6 +14,7 @@ import { Badge } from '@/components/ui/badge';
 import { LoadingSpinner } from '@/components/ui/spinner';
 import { Users, Copy, ArrowRight } from 'lucide-react';
 import useSWR from 'swr';
+import { copyInviteLink } from '../../../components/copyInviteLink';
 
 interface Room {
   id: string;
@@ -52,16 +53,6 @@ export default function Page() {
     });
   }
 
-  const copyInviteLink = (roomCode: string) => {
-    const inviteLink = `${window.location.origin}/invite/${roomCode}`;
-    navigator.clipboard.writeText(inviteLink).then(() => {
-      toast({
-        description: 'Invite Link Copied to Clipboard',
-        className: 'bg-zinc-800 border-zinc-700 text-zinc-100',
-      });
-    });
-  };
-
   if (isLoading) {
     return <RoomCardSkeleton isValidating={isValidating} />;
   }
@@ -95,7 +86,7 @@ export default function Page() {
               <CardFooter className="flex justify-between">
                 <Button
                   size="sm"
-                  onClick={() => copyInviteLink(room.code)}
+                  onClick={() => copyInviteLink(room.code, toast)}
                   className="bg-zinc-700 text-zinc-300 hover:bg-zinc-600 hover:text-zinc-100"
                 >
                   <Copy className="w-4 h-4 mr-2" />

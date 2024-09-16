@@ -15,6 +15,7 @@ import { useToast } from '@/components/ui/use-toast';
 import axios from 'axios';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { LogOut } from 'lucide-react';
 
 interface LeaveRoomProps {
   roomId: string;
@@ -33,7 +34,8 @@ export default function LeaveRoom({ roomId }: LeaveRoomProps) {
         toast({
           title: 'Success',
           description: 'You have left the room.',
-          variant: 'default',
+          variant: 'destructive',
+          className: 'bg-zinc-800 border-zinc-700 text-zinc-100',
         });
         router.push('/rooms');
       }
@@ -51,7 +53,12 @@ export default function LeaveRoom({ roomId }: LeaveRoomProps) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button className="bg-red-500 hover:bg-red-600 mt-2 ml-2">
+        <Button
+          variant="destructive"
+          size="sm"
+          className="bg-red-600 text-zinc-100 hover:bg-red-700"
+        >
+          <LogOut className="w-4 h-4 mr-2" />
           {isLeavingRoom ? 'Leaving...' : 'Leave Room'}
         </Button>
       </AlertDialogTrigger>
