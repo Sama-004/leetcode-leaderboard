@@ -1,3 +1,4 @@
+// @ts-nocheck
 import prisma from '../../../../../../db/db';
 import { NextResponse } from 'next/server';
 

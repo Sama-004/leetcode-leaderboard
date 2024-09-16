@@ -2,9 +2,13 @@
   "name": "lc-leaderboard",
   "version": "0.1.0",
   "private": true,
+  "prisma": {
+    "schema": "db/prisma/schema.prisma"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "vercel-build": "npx prisma generate && next build",
     "start": "next start",
     "lint": "next lint"
   },

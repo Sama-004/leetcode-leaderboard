@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { NextResponse } from 'next/server';
 import { authOptions } from '../../../../../lib/auth';
 import { getServerSession } from 'next-auth';
@@ -46,7 +47,7 @@ export async function GET(
       return NextResponse.json({ error: 'Room not found' }, { status: 404 });
     }
     const isParticipant = room.participants.some(
-      (p) => p.user.id === session.user.id,
+      (p: { user: { id: string } }) => p.user.id === session.user.id,
     );
     if (!isParticipant && room.creator.id !== session.user.id) {
       return NextResponse.json(

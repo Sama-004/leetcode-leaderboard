@@ -4,6 +4,7 @@ import axios from 'axios';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../../../lib/auth';
 import RoomPageClient from './room-id-client';
+import { redirect } from 'next/navigation';
 
 async function getRoomDetails(roomId: string) {
   try {
@@ -19,7 +20,7 @@ async function getRoomDetails(roomId: string) {
       },
     };
     const response = await axios.get(
-      `http://localhost:3000/api/room/${roomId}`,
+      `${process.env.BASE_URL}/api/room/${roomId}`,
       config,
     );
     return response.data;
@@ -42,7 +43,7 @@ async function getNotifications(roomId: string) {
       },
     };
     const response = await axios.get(
-      `http://localhost:3000/api/room/${roomId}/notifications`,
+      `${process.env.BASE_URL}/api/room/${roomId}/notifications`,
       config,
     );
 
@@ -77,6 +78,10 @@ type Props = {
 
 export default async function Page({ params }: Props) {
   const room = await getRoomDetails(params.roomId);
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    redirect('/');
+  }
   const notifications = await getNotifications(params.roomId);
   if (!room) {
     return <div>Room not found</div>;

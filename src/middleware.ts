@@ -33,5 +33,5 @@ export default withAuth(
 );
 
 export const config = {
-  matcher: ['/verify', '/rooms/', '/room/:path*'],
+  matcher: ['/verify', '/rooms/', '/rooms/new', '/room/:path*'],
 };

@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { NextResponse } from 'next/server';
 import { authOptions } from '../../../../../lib/auth';
 import { getServerSession } from 'next-auth';

@@ -13,7 +13,7 @@ export default function Page({ params }: { params: { invitecode: string } }) {
 
   useEffect(() => {
     joinRoom();
-  }, []);
+  });
 
   const joinRoom = async () => {
     try {

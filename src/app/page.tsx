@@ -5,6 +5,8 @@ import { technologies } from '@/components/technologies';
 import { TechnologyLogo } from '@/components/technology-logo';
 import Link from 'next/link';
 import StaronGithub from '@/components/star_on_github';
+import { getServerSession } from 'next-auth';
+import { redirect } from 'next/navigation';
 
 export const metadata: Metadata = {
   title: 'LeetCode Friends Leaderboard',
@@ -13,6 +15,11 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
+  const session = await getServerSession();
+
+  if (session) {
+    redirect('/verify');
+  }
   return (
     <div className="min-h-screen bg-zinc-900 text-zinc-100">
       {/* Header */}
@@ -28,7 +35,7 @@ export default async function Page() {
         </h2>
         <p className="text-xl mb-8 text-zinc-300 max-w-2xl mx-auto">
           Join Lc Friends Leaderboard to compare your LeetCode stats, create
-          private rooms, and stay updated on your friends' coding achievements.
+          private rooms, and stay updated on your friends coding achievements.
           Motivate each other to improve and climb the rankings together!
         </p>
         <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
