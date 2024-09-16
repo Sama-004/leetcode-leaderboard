@@ -27,8 +27,8 @@ function Sidebar({ className }: { className?: string }) {
     <div className={`flex flex-col h-full ${className}`}>
       <div className="flex-1">
         <div className="px-3 py-2">
-          <h2 className="mb-2 px-4 text-lg font-semibold tracking-light">
-            Menu
+          <h2 className="mb-2 px-4 text-lg font-semibold tracking-light text-sm text-center">
+            Lc Friends Leaderboard
           </h2>
           <div className="space-y-1">
             {navItems.map((item) => (

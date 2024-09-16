@@ -249,8 +249,9 @@ export default function RoomPageClient({
                       <div className="flex items-center space-x-2">
                         <Avatar>
                           <AvatarImage src={participant.user.image || ''} />
-                          <AvatarFallback>
-                            {participant.user.leetCodeUsername?.[0] || 'U'}
+                          <AvatarFallback className="text-black">
+                            {participant.user.leetCodeUsername?.[0]?.toUpperCase() ||
+                              'U'}
                           </AvatarFallback>
                         </Avatar>
                         <span>
