@@ -16,8 +16,11 @@ export async function fetchUserStats(username: string, userId: string) {
       variables: { username },
     });
 
-    const { attendedContestsCount, rating, globalRanking } =
-      contestResponse.data.data.userContestRanking;
+    const {
+      attendedContestsCount = 0,
+      rating = 0,
+      globalRanking = 0,
+    } = contestResponse.data.data.userContestRanking ?? {};
 
     const progressResponse = await axios.post('https://leetcode.com/graphql', {
       query: `
