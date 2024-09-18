@@ -19,9 +19,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} bg-zinc-900 text-white`}>
+        <AnnouncementBar />
         <Providers>{children}</Providers>
         <Toaster />
       </body>
     </html>
+  );
+}
+
+function AnnouncementBar() {
+  return (
+    <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white text-sm py-2 text-center">
+      Fixing auth related issues. Don't signup yet!
+    </div>
   );
 }
