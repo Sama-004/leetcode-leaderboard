@@ -1,4 +1,3 @@
-// @ts-nocheck
 import prisma from '../../../../../../db/db';
 import { NextResponse } from 'next/server';
 
@@ -12,17 +11,6 @@ export async function GET(
     const room = await prisma.room.findUnique({
       where: { id: roomId },
       include: { notifications: { orderBy: { createdAt: 'desc' } } },
-      // include: {
-      //   notifications: {
-      //     select: {
-      //       id: true,
-      //       message: true,
-      //       createdAt: true,
-      //       color: true,
-      //     },
-      //     orderBy: { createdAt: "desc" },
-      //   },
-      // },
     });
 
     if (!room) {

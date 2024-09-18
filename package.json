@@ -10,7 +10,8 @@
     "build": "next build",
     "vercel-build": "npx prisma generate && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "type-check":"tsc --noEmit --watch"
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.7",

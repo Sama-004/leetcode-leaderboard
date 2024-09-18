@@ -1,6 +1,5 @@
-// @ts-nocheck
 import { NextResponse } from 'next/server';
-import prisma from '../../../../../db/db';
+import prisma, { PrismaTransactionalClient } from '../../../../../db/db';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../../../lib/auth';
 import { GenerateRoomCode } from '../../../../../lib/roomCode';
@@ -21,42 +20,44 @@ export async function POST(req: Request, res: Response) {
 
     const roomCode: string = await GenerateRoomCode();
 
-    const newRoom = await prisma.$transaction(async (prisma) => {
-      const newRoom = await prisma.room.create({
-        data: {
-          name: roomName,
-          code: roomCode,
-          creator: {
-            connect: { id: session.user.id },
-          },
-          participants: {
-            create: {
-              user: {
-                connect: { id: session.user.id },
+    const newRoom = await prisma.$transaction(
+      async (prisma: PrismaTransactionalClient) => {
+        const newRoom = await prisma.room.create({
+          data: {
+            name: roomName,
+            code: roomCode,
+            creator: {
+              connect: { id: session.user.id },
+            },
+            participants: {
+              create: {
+                user: {
+                  connect: { id: session.user.id },
+                },
               },
             },
           },
-        },
-        include: {
-          creator: true,
-          participants: {
-            include: {
-              user: true,
+          include: {
+            creator: true,
+            participants: {
+              include: {
+                user: true,
+              },
             },
           },
-        },
-      });
-      await prisma.notification.create({
-        data: {
-          roomId: newRoom.id,
-          message: `${
-            session.user.leetCodeUsername || 'A new user'
-          } created the room ${roomName}`,
-          color: 'blue',
-        },
-      });
-      return newRoom;
-    });
+        });
+        await prisma.notification.create({
+          data: {
+            roomId: newRoom.id,
+            message: `${
+              session.user.leetCodeUsername || 'A new user'
+            } created the room ${roomName}`,
+            color: 'blue',
+          },
+        });
+        return newRoom;
+      },
+    );
 
     return NextResponse.json(newRoom, { status: 200 });
   } catch (err) {

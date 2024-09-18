@@ -1,8 +1,7 @@
-// @ts-nocheck
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../../../../lib/auth';
 import { NextResponse } from 'next/server';
-import prisma from '../../../../../../db/db';
+import prisma, { PrismaTransactionalClient } from '../../../../../../db/db';
 
 export async function GET(
   req: Request,
@@ -49,37 +48,39 @@ export async function GET(
       );
     }
 
-    const updatedRoom = await prisma.$transaction(async (prisma) => {
-      const updatedRoom = await prisma.room.update({
-        where: { id: room.id },
-        data: {
-          participants: {
-            create: {
-              userId: session.user.id,
+    const updatedRoom = await prisma.$transaction(
+      async (prisma: PrismaTransactionalClient) => {
+        const updatedRoom = await prisma.room.update({
+          where: { id: room.id },
+          data: {
+            participants: {
+              create: {
+                userId: session.user.id,
+              },
             },
           },
-        },
-        include: {
-          participants: {
-            include: {
-              user: true,
+          include: {
+            participants: {
+              include: {
+                user: true,
+              },
             },
           },
-        },
-      });
+        });
 
-      await prisma.notification.create({
-        data: {
-          roomId: room.id,
-          message: `${
-            session.user.leetCodeUsername || 'A new user'
-          } joined the room`,
-          color: 'join',
-        },
-      });
+        await prisma.notification.create({
+          data: {
+            roomId: room.id,
+            message: `${
+              session.user.leetCodeUsername || 'A new user'
+            } joined the room`,
+            color: 'join',
+          },
+        });
 
-      return updatedRoom;
-    });
+        return updatedRoom;
+      },
+    );
 
     return NextResponse.json(
       { message: 'Room joined successfully', roomId: room.id, success: true },

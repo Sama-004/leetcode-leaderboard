@@ -1,8 +1,7 @@
-// @ts-nocheck
 import { NextResponse } from 'next/server';
 import { authOptions } from '../../../../../lib/auth';
 import { getServerSession } from 'next-auth';
-import prisma from '../../../../../db/db';
+import prisma, { PrismaTransactionalClient } from '../../../../../db/db';
 
 export async function POST(req: Request, res: Response) {
   const session = await getServerSession(authOptions);
@@ -38,36 +37,38 @@ export async function POST(req: Request, res: Response) {
       );
     }
 
-    const updatedRoom = await prisma.$transaction(async (prisma) => {
-      const updatedRoom = await prisma.room.update({
-        where: { id: room.id },
-        data: {
-          participants: {
-            create: {
-              userId: session.user.id,
+    const updatedRoom = await prisma.$transaction(
+      async (prisma: PrismaTransactionalClient) => {
+        const updatedRoom = await prisma.room.update({
+          where: { id: room.id },
+          data: {
+            participants: {
+              create: {
+                userId: session.user.id,
+              },
             },
           },
-        },
-        include: {
-          participants: {
-            include: {
-              user: true,
+          include: {
+            participants: {
+              include: {
+                user: true,
+              },
             },
           },
-        },
-      });
+        });
 
-      await prisma.notification.create({
-        data: {
-          roomId: room.id,
-          color: 'join',
-          message: `${
-            session.user.leetCodeUsername || 'A new user'
-          } joined the room`,
-        },
-      });
-      return updatedRoom;
-    });
+        await prisma.notification.create({
+          data: {
+            roomId: room.id,
+            color: 'join',
+            message: `${
+              session.user.leetCodeUsername || 'A new user'
+            } joined the room`,
+          },
+        });
+        return updatedRoom;
+      },
+    );
 
     return NextResponse.json(updatedRoom, { status: 200 });
   } catch (err) {
