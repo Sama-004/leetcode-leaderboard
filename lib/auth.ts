@@ -18,11 +18,12 @@ export const authOptions: NextAuthOptions = {
           },
         });
         if (!existingUser) {
-          await prisma.user.create({
+          const newUser = await prisma.user.create({
             data: {
               email: user.email,
             },
           });
+          user.id = newUser.id;
         } else {
           user.id = existingUser.id;
           user.isVerified = existingUser.isVerified;
