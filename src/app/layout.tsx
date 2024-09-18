@@ -19,7 +19,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} bg-zinc-900 text-white`}>
-        <AnnouncementBar />
+        {process.env.DISPLAY_ANNOUNCEMENT === 'true' ? (
+          <AnnouncementBar />
+        ) : null}
         <Providers>{children}</Providers>
         <Toaster />
       </body>
@@ -30,7 +32,7 @@ export default function RootLayout({
 function AnnouncementBar() {
   return (
     <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white text-sm py-2 text-center">
-      Fixing auth related issues. Don't signup yet!
+      {process.env.PUBLIC_ANNOUNCEMENT}
     </div>
   );
 }

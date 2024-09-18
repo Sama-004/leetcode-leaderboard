@@ -60,7 +60,7 @@ function Sidebar({ className }: { className?: string }) {
         <Button
           variant="outline"
           className="w-full text-zinc-100 bg-zinc-800 hover:bg-zinc-700 hover:text-zinc-100"
-          onClick={() => signOut()}
+          onClick={() => signOut({ callbackUrl: '/' })}
         >
           <LogOut className="mr-2 h-4 w-4" />
           Sign out

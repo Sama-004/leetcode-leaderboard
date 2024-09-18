@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 import { Bell, Trophy, Users } from 'lucide-react';
-import GetStarted from '@/components/get-started';
 import { technologies } from '@/components/technologies';
 import { TechnologyLogo } from '@/components/technology-logo';
 import Link from 'next/link';
 import StaronGithub from '@/components/star_on_github';
 import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
+import ContinueWithGoogle from '@/components/continue-with-google';
 
 export const metadata: Metadata = {
   title: 'LeetCode Friends Leaderboard',
@@ -40,7 +40,9 @@ export default async function Page() {
         </p>
         <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
           {/* Get Started button */}
-          <GetStarted>Get Started</GetStarted>
+          <div className="flex justify-center">
+            <ContinueWithGoogle />
+          </div>
         </div>
       </section>
 
