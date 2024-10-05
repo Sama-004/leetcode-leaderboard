@@ -28,6 +28,15 @@ export function UsernameInput() {
       return;
     }
 
+    if (!username.trim()) {
+      toast({
+        variant: 'destructive',
+        title: 'Username required',
+        description: 'Need a username to continue',
+      });
+      return;
+    }
+
     try {
       setIsLoading(true);
       const response = await axios.post('/api/verify', {
@@ -121,6 +130,7 @@ export function UsernameInput() {
       <Input
         type="text"
         placeholder="Enter your LeetCode username"
+        required={true}
         value={username}
         disabled={isLoading}
         onChange={(e) => setUsername(e.target.value)}
