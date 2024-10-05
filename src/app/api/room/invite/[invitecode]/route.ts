@@ -29,7 +29,7 @@ export async function GET(
     if (!room) {
       return NextResponse.json(
         { message: 'Room not found', success: false },
-        { status: 404 },
+        { status: 201 },
       );
     }
 

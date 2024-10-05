@@ -31,6 +31,15 @@ export default function Page({ params }: { params: { invitecode: string } }) {
           className: 'bg-zinc-800 border-zinc-700 text-zinc-100',
         });
         router.push(`/room/${roomId}`);
+      } else if (response.status === 201) {
+        toast({
+          title: 'Invalid invite code',
+          description:
+            'No room found with that invite code. Please check your code agian',
+          variant: 'destructive',
+          className: 'bg-red-600',
+        });
+        router.push('/rooms');
       } else {
         toast({
           title: 'Error',
