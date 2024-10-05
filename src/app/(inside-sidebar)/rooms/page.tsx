@@ -77,7 +77,7 @@ export default function Page() {
                 </p>
                 <Badge
                   variant="secondary"
-                  className="bg-zinc-700 text-zinc-300"
+                  className="bg-zinc-700 text-zinc-300 hover:bg-black"
                 >
                   <Users className="w-3 h-3 mr-1" />
                   {room.participants.length} participants
