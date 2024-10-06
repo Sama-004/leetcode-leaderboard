@@ -3,6 +3,12 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import {
   Table,
   TableBody,
   TableCell,
@@ -21,9 +27,10 @@ import { useToast } from '@/components/ui/use-toast';
 import useSWR from 'swr';
 import LeaveRoom from './LeaveRoom';
 import { Button } from '@/components/ui/button';
-import { Menu, Copy } from 'lucide-react';
+import { Copy, ChevronDown } from 'lucide-react';
 import { copyInviteLink } from '@/components/copyInviteLink';
 import { Badge } from '@/components/ui/badge';
+import { format } from 'date-fns';
 
 interface Notification {
   id: string;
@@ -78,6 +85,7 @@ export default function RoomPageClient({
   const { toast } = useToast();
   const [activeTab, setActiveTab] = useState('leaderboard');
   const [lastReadTimeStamp, setLastReadTimeStamp] = useState('0');
+  const groupedNotifications = groupNotifications(initialNotifications);
 
   const { data: notifications = initialNotifications, error } = useSWR<
     Notification[]
@@ -192,7 +200,7 @@ export default function RoomPageClient({
                 className="w-full bg-zinc-800 text-zinc-300 hover:bg-zinc-700 hover:text-zinc-100"
               >
                 {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
-                <Menu className="ml-2 h-4 w-4" />
+                <ChevronDown className="ml-2 h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
@@ -285,18 +293,39 @@ export default function RoomPageClient({
         </TabsContent>
 
         <TabsContent value="notifications" className="mt-4">
-          <ul className="space-y-4">
-            {notifications.map((notification) => (
-              <li key={notification.id} className="bg-zinc-800 p-4 rounded-lg">
-                <p className={colorMap[notification.color]}>
-                  {notification.message}
-                </p>
-                <p className="text-zinc-400 text-sm mt-1">
-                  {new Date(notification.createdAt).toLocaleString()}
-                </p>
-              </li>
-            ))}
-          </ul>
+          {Object.entries(groupedNotifications).map(([date, notifs]) => (
+            <div key={date} className="mb-6">
+              <h3 className="text-lg font-semibold mb-2 text-zinc-300 text-center">
+                {date === 'Today' || date === 'Yesterday' ? (
+                  date
+                ) : (
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger>{date}</TooltipTrigger>
+                      <TooltipContent>
+                        <p>MM/DD/YYYY Format</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                )}
+              </h3>
+              <ul className="space-y-4">
+                {notifs.map((notification) => (
+                  <li
+                    key={notification.id}
+                    className="bg-zinc-800 p-4 rounded-lg"
+                  >
+                    <p className={colorMap[notification.color]}>
+                      {notification.message}
+                    </p>
+                    <p className="text-zinc-400 text-sm mt-1">
+                      {format(new Date(notification.createdAt), 'HH:mm')}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </TabsContent>
 
         <TabsContent value="comparison" className="mt-4">
@@ -312,5 +341,35 @@ export default function RoomPageClient({
         </TabsContent>
       </Tabs>
     </div>
+  );
+}
+
+function groupNotifications(notifications: Notification[]) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+
+  return notifications.reduce(
+    (groups, notification) => {
+      const notificationDate = new Date(notification.createdAt);
+      notificationDate.setHours(0, 0, 0, 0);
+
+      let key;
+      if (notificationDate.getTime() === today.getTime()) {
+        key = 'Today';
+      } else if (notificationDate.getTime() === yesterday.getTime()) {
+        key = 'Yesterday';
+      } else {
+        key = notificationDate.toLocaleDateString();
+      }
+
+      if (!groups[key]) {
+        groups[key] = [];
+      }
+      groups[key].push(notification);
+      return groups;
+    },
+    {} as Record<string, Notification[]>,
   );
 }
