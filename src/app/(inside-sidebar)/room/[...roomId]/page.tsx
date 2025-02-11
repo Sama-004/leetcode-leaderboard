@@ -1,65 +1,21 @@
-import { Metadata, ResolvingMetadata } from 'next';
-import { headers } from 'next/headers';
-import axios from 'axios';
+import { Metadata } from 'next';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../../../../lib/auth';
 import RoomPageClient from './room-id-client';
 import { redirect } from 'next/navigation';
+import { getRoomDetailsAction } from '../../../../../actions/room-details-action';
+import { getNotificationsAction } from '../../../../../actions/room-notifications-action';
+import { cache } from 'react';
 
-async function getRoomDetails(roomId: string) {
-  try {
-    const session = await getServerSession(authOptions);
-    if (!session || !session.accessToken) {
-      throw new Error('No session or access token available');
-    }
-    const headersList = headers();
-    const cookies = headersList.get('cookie');
-    const config = {
-      headers: {
-        Cookie: cookies,
-      },
-    };
-    const response = await axios.get(
-      `${process.env.BASE_URL}/api/room/${roomId}`,
-      config,
-    );
-    return response.data;
-  } catch (error) {
-    console.error('Failed to fetch room details', error);
-    return null;
-  }
-}
-async function getNotifications(roomId: string) {
-  try {
-    const session = await getServerSession(authOptions);
-    if (!session || !session.user) {
-      throw new Error('No session or user available');
-    }
-    const headersList = headers();
-    const cookies = headersList.get('cookie');
-    const config = {
-      headers: {
-        Cookie: cookies,
-      },
-    };
-    const response = await axios.get(
-      `${process.env.BASE_URL}/api/room/${roomId}/notifications`,
-      config,
-    );
+const getCachedRoomDetailsAction = cache(getRoomDetailsAction);
 
-    return response.data;
-  } catch (error) {
-    console.error('Failed to fetch notifications', error);
-    return [];
-  }
-}
-
-export async function generateMetadata(
-  { params }: { params: { roomId: string } },
-  parent: ResolvingMetadata,
-): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: { roomId: string };
+}): Promise<Metadata> {
   try {
-    const room = await getRoomDetails(params.roomId);
+    const room = await getCachedRoomDetailsAction(params.roomId[0]);
     return {
       title: room && room.name ? `${room.name}` : 'Room',
     };
@@ -77,12 +33,18 @@ type Props = {
 };
 
 export default async function Page({ params }: Props) {
-  const room = await getRoomDetails(params.roomId);
+  const room = await getCachedRoomDetailsAction(params.roomId[0]);
+
+  if (room.error) {
+    return <div>Room not found</div>;
+  }
+
   const session = await getServerSession(authOptions);
   if (!session) {
     redirect('/');
   }
-  const notifications = await getNotifications(params.roomId);
+  const notifications = await getNotificationsAction(params.roomId[0]);
+
   if (!room) {
     return <div>Room not found</div>;
   }

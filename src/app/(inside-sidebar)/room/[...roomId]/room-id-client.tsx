@@ -125,16 +125,17 @@ export default function RoomPageClient({
     setLastReadTimeStamp(now);
   }, [roomId]);
 
-  useEffect(() => {
-    if (error) {
-      console.error('Failed to fetch notifications', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to fetch notifications. Please try again.',
-        variant: 'destructive',
-      });
-    }
-  }, [error, toast]);
+  // TODO: look into this later
+  // useEffect(() => {
+  //   if (error) {
+  //     console.error('Failed to fetch notifications', error);
+  //     toast({
+  //       title: 'Error',
+  //       description: 'Failed to fetch notifications. Please try again.',
+  //       variant: 'destructive',
+  //     });
+  //   }
+  // }, [error, toast]);
 
   return (
     <div className="min-h-screen bg-zinc-900 text-zinc-100 p-4 sm:p-6">
